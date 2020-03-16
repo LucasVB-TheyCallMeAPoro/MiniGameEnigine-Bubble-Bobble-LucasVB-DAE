@@ -6,7 +6,6 @@ namespace dae
 	class Transform;
 	class BaseComponent
 	{
-		void RootInitialize();
 	public:
 		BaseComponent(const BaseComponent& other) = delete;
 		BaseComponent(BaseComponent&& other) noexcept = delete;
@@ -18,13 +17,11 @@ namespace dae
 		GameObject* GetGameObject() const { return m_pGameObject; }
 		Transform* GetTransform() const;
 		void SetGameObject(GameObject* go);
-	protected:
-
-		virtual void Initialize() = 0;
+		virtual void Render() const = 0;
 		virtual void Update(float elapsedSec) = 0;
-		virtual void Draw() = 0;
-		virtual void PostDraw() {}
-
+		virtual void Initialize() = 0;
+		
+	protected:
 		GameObject* m_pGameObject;
 	};
 }

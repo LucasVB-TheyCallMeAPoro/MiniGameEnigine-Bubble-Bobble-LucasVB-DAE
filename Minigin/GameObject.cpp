@@ -12,7 +12,14 @@ dae::GameObject::GameObject()
 	AddComponent(m_pTransform);
 }
 
-dae::GameObject::~GameObject() = default;
+dae::GameObject::~GameObject()
+{
+	for (BaseComponent* pComp : m_pComponents)
+	{
+		delete pComp;
+		pComp = nullptr;
+	}
+}
 
 void dae::GameObject::AddComponent(BaseComponent * pComp)
 {
@@ -55,12 +62,25 @@ void dae::GameObject::RemoveComponent(BaseComponent* pComp)
 	pComp->SetGameObject(nullptr);
 }
 
-void dae::GameObject::Update(float){}
+void dae::GameObject::Update(float elapsedSec)
+{
+	//std::cout << m_pComponents.size() << std::endl;
+	for (BaseComponent* pComp : m_pComponents)
+	{
+		pComp->Update(elapsedSec);
+	}
+
+}
 
 void dae::GameObject::Render() const
 {
 	const auto pos = m_pTransform->GetPosition();
-	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+	if(m_Texture != nullptr)
+		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+	for (BaseComponent* pComp : m_pComponents)
+	{
+		pComp->Render();
+	}
 }
 
 void dae::GameObject::SetTexture(const std::string& filename)

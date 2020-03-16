@@ -1,10 +1,9 @@
 #include "MiniginPCH.h"
 #include "SceneManager.h"
-#include "Scene.h"
-
+#include "GameScene.h"
 void dae::SceneManager::Update(float elapsed)
 {
-	for(auto& scene : m_Scenes)
+	for (GameScene* scene : m_GameScenes)
 	{
 		scene->Update(elapsed);
 	}
@@ -12,15 +11,26 @@ void dae::SceneManager::Update(float elapsed)
 
 void dae::SceneManager::Render()
 {
-	for (const auto& scene : m_Scenes)
+	for (GameScene* scene : m_GameScenes)
 	{
 		scene->Render();
 	}
 }
 
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
+dae::SceneManager::~SceneManager()
 {
-	const auto scene = std::shared_ptr<Scene>(new Scene(name));
-	m_Scenes.push_back(scene);
-	return *scene;
+	/*for (int i{ 0 }; i < m_GameScenes.size(); ++i)
+	{
+		delete m_GameScenes[i];
+	}*/
+}
+
+void dae::SceneManager::CreateScene(GameScene* gs)
+{
+	const auto it = std::find(m_GameScenes.begin(), m_GameScenes.end(), gs);
+
+	if (it == m_GameScenes.end())
+	{
+		m_GameScenes.push_back(gs);
+	}
 }

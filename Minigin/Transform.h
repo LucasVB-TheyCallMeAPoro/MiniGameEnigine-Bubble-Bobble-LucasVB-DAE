@@ -22,6 +22,6 @@ namespace dae
 
 		virtual void Initialize() override;
 		virtual void Update(float elapsedSec) override;
-		virtual void Draw() override;
+		virtual void Render() const override;
 	};
 }

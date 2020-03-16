@@ -26,6 +26,6 @@ void dae::Transform::Update(float)
 {
 }
 
-void dae::Transform::Draw()
+void dae::Transform::Render() const 
 {
 }

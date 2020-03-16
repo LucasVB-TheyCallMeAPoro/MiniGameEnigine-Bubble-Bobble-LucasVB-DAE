@@ -7,10 +7,9 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
-#include "TextObject.h"
+#include "TextComponent.h"
 #include "GameObject.h"
-#include "Scene.h"
-
+#include "DemoScene.h"
 using namespace std;
 using namespace std::chrono;
 
@@ -42,21 +41,10 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
+	SceneManager::GetInstance().CreateScene(new DemoScene());
+	//auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
-	auto go = std::make_shared<GameObject>();
-	go->SetTexture("background.jpg");
-	scene.Add(go);
 
-	go = std::make_shared<GameObject>();
-	go->SetTexture("logo.png");
-	go->SetPosition(216, 180);
-	scene.Add(go);
-
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto to = std::make_shared<TextObject>("Programming 4 Assignment", font);
-	to->SetPosition(80, 20);
-	scene.Add(to);
 }
 
 void dae::Minigin::Cleanup()
@@ -82,22 +70,22 @@ void dae::Minigin::Run()
 		auto& input = InputManager::GetInstance();
 
 		bool doContinue = true;
-		float fps = 120.f;
-		float MS_PER_UPDATE = (1 / fps) * 1000;
+		int fps = 60;
+		std::chrono::high_resolution_clock::duration updateDuration{ 1'000'000'000 / fps };
 		auto previousTime = std::chrono::high_resolution_clock::now();
-		float catchUp = 0.0f;
+		std::chrono::high_resolution_clock::duration catchUp{};
 		while (doContinue)
 		{
 			const auto currentTime = high_resolution_clock::now();
-			const float elapsed = static_cast<float>((currentTime - previousTime).count());
+			const std::chrono::high_resolution_clock::duration elapsed = currentTime - previousTime;
 			previousTime = currentTime;
 			catchUp += elapsed;
 			doContinue = input.ProcessInput();
 			
-			while (catchUp >= MS_PER_UPDATE)
+			while (catchUp >= updateDuration)
 			{
-				sceneManager.Update(elapsed);
-				catchUp -= MS_PER_UPDATE;
+				sceneManager.Update(std::chrono::duration_cast<std::chrono::duration<float>>(updateDuration).count());
+				catchUp -= updateDuration;
 			}
 			renderer.Render();	
 		}

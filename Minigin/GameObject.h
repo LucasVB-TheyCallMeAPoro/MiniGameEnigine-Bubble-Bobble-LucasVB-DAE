@@ -1,18 +1,15 @@
 #pragma once
-#include "SceneObject.h"
-
 
 namespace dae
 {
 	class BaseComponent;
 	class Transform;
 	class Texture2D;
-	class GameObject : public SceneObject
+	class GameObject
 	{
 	public:
-		void Update(float elapsed) override;
-		void Render() const override;
-
+		void Update(float elapsed);
+		void Render() const;
 		void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);
 
@@ -28,7 +25,7 @@ namespace dae
 		bool HasComponent();
 	private:
 		Transform* m_pTransform;
-		std::shared_ptr<Texture2D> m_Texture{};
+		Texture2D* m_Texture;
 		std::vector<BaseComponent*> m_pComponents;
 
 		GameObject(const GameObject& other) = delete;

@@ -3,17 +3,17 @@
 
 namespace dae
 {
-	class Scene;
+	class GameScene;
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		Scene& CreateScene(const std::string& name);
-
+		void CreateScene(GameScene* gs);
 		void Update(float elapsed);
 		void Render();
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
-		std::vector<std::shared_ptr<Scene>> m_Scenes;
+		~SceneManager();
+		std::vector<GameScene*> m_GameScenes;
 	};
 }

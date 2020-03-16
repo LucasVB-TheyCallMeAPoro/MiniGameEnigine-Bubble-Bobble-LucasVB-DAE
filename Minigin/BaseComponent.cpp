@@ -24,7 +24,3 @@ void dae::BaseComponent::SetGameObject(GameObject* go)
 	m_pGameObject = go;
 }
 
-void BaseComponent::RootInitialize()
-{
-	Initialize();
-}
