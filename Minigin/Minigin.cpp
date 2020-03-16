@@ -82,16 +82,24 @@ void dae::Minigin::Run()
 		auto& input = InputManager::GetInstance();
 
 		bool doContinue = true;
+		float fps = 120.f;
+		float MS_PER_UPDATE = (1 / fps) * 1000;
+		auto previousTime = std::chrono::high_resolution_clock::now();
+		float catchUp = 0.0f;
 		while (doContinue)
 		{
 			const auto currentTime = high_resolution_clock::now();
-			
+			const float elapsed = static_cast<float>((currentTime - previousTime).count());
+			previousTime = currentTime;
+			catchUp += elapsed;
 			doContinue = input.ProcessInput();
-			sceneManager.Update();
-			renderer.Render();
 			
-			auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
-			this_thread::sleep_for(sleepTime);
+			while (catchUp >= MS_PER_UPDATE)
+			{
+				sceneManager.Update(elapsed);
+				catchUp -= MS_PER_UPDATE;
+			}
+			renderer.Render();	
 		}
 	}
 
