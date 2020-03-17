@@ -11,6 +11,15 @@ dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr
 	: m_NeedsUpdate(true), m_Text(text), m_Font(font), m_Texture(nullptr) , m_Color{ 255,255,255 }
 { }
 
+dae::TextComponent::~TextComponent()
+{
+	if (m_Texture != nullptr)
+	{
+		delete m_Texture;
+		m_Texture = nullptr;
+	}
+}
+
 void dae::TextComponent::Update(float)
 {
 	if (m_NeedsUpdate)

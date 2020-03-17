@@ -15,7 +15,7 @@ namespace dae
 
 		Transform* GetTransform() const { return m_pTransform; };
 		GameObject();
-		virtual ~GameObject();
+		~GameObject();
 
 		void AddComponent(BaseComponent* pComp);
 		void RemoveComponent(BaseComponent* pComp);

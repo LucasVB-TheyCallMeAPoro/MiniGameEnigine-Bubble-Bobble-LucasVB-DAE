@@ -74,6 +74,7 @@ void dae::Minigin::Run()
 		std::chrono::high_resolution_clock::duration updateDuration{ 1'000'000'000 / fps };
 		auto previousTime = std::chrono::high_resolution_clock::now();
 		std::chrono::high_resolution_clock::duration catchUp{};
+		int nbOfFrames{};
 		while (doContinue)
 		{
 			const auto currentTime = high_resolution_clock::now();
@@ -81,11 +82,16 @@ void dae::Minigin::Run()
 			previousTime = currentTime;
 			catchUp += elapsed;
 			doContinue = input.ProcessInput();
+			++nbOfFrames;
 			
 			while (catchUp >= updateDuration)
 			{
+				if ((1000 / nbOfFrames) > fps)
+					nbOfFrames = fps;
+				sceneManager.SetNbOfFrames(nbOfFrames);
 				sceneManager.Update(std::chrono::duration_cast<std::chrono::duration<float>>(updateDuration).count());
 				catchUp -= updateDuration;
+				nbOfFrames = 0;
 			}
 			renderer.Render();	
 		}

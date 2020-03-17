@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "TextComponent.h"
 #include "ResourceManager.h"
+#include "SceneManager.h"
 dae::DemoScene::DemoScene()
 	:GameScene("DemoScene")
 	,m_fpsCounter{nullptr}
@@ -41,7 +42,7 @@ void dae::DemoScene::Initialize()
 void dae::DemoScene::Update(float elapsedSec)
 {
 	std::string text = "FPS: ";
-	int fps = 10;
+	int fps = SceneManager::GetInstance().GetNumberOfFrames();
 	text += std::to_string(fps);
 	m_fpsCounter->GetComponent<TextComponent>()->SetText(text);
 	for (auto& object : GetGameObjects())

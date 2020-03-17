@@ -9,6 +9,11 @@ void dae::SceneManager::Update(float elapsed)
 	}
 }
 
+int dae::SceneManager::GetNumberOfFrames() const
+{
+	return m_NrOfFrames;
+}
+
 void dae::SceneManager::Render()
 {
 	for (GameScene* scene : m_GameScenes)
@@ -19,10 +24,10 @@ void dae::SceneManager::Render()
 
 dae::SceneManager::~SceneManager()
 {
-	/*for (int i{ 0 }; i < m_GameScenes.size(); ++i)
+	for (int i{ 0 }; i < m_GameScenes.size(); ++i)
 	{
 		delete m_GameScenes[i];
-	}*/
+	}
 }
 
 void dae::SceneManager::CreateScene(GameScene* gs)
@@ -33,4 +38,9 @@ void dae::SceneManager::CreateScene(GameScene* gs)
 	{
 		m_GameScenes.push_back(gs);
 	}
+}
+
+void dae::SceneManager::SetNbOfFrames(int frames)
+{
+	m_NrOfFrames = frames;
 }

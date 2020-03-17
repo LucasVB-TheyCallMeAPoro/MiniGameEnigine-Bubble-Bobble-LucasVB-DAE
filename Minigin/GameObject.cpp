@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "Transform.h"
 #include "BaseComponent.h"
+#include "Texture2D.h"
 dae::GameObject::GameObject()
 	:m_pComponents{ std::vector<BaseComponent*>{} }
 	,m_pTransform{nullptr}
@@ -18,6 +19,11 @@ dae::GameObject::~GameObject()
 	{
 		delete pComp;
 		pComp = nullptr;
+	}
+	if (m_Texture != nullptr)
+	{
+		delete m_Texture;
+		m_Texture = nullptr;
 	}
 }
 
