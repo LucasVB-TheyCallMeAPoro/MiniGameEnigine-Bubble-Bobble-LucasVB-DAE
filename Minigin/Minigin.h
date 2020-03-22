@@ -2,11 +2,12 @@
 struct SDL_Window;
 namespace dae
 {
+	class GameScene;
 	class Minigin
 	{
 	public:
 		void Initialize();
-		void LoadGame() const;
+		void LoadGame(GameScene* pScene) const;
 		void Cleanup();
 		void Run();
 	private:

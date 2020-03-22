@@ -9,7 +9,7 @@
 #include <SDL.h>
 #include "TextComponent.h"
 #include "GameObject.h"
-#include "DemoScene.h"
+#include "GameScene.h"
 using namespace std;
 using namespace std::chrono;
 
@@ -34,16 +34,17 @@ void dae::Minigin::Initialize()
 	}
 
 	Renderer::GetInstance().Init(m_Window);
+	ResourceManager::GetInstance().Init("../Data/");
 }
 
 /**
  * Code constructing the scene world starts here
  */
-void dae::Minigin::LoadGame() const
+void dae::Minigin::LoadGame(GameScene* pScene) const
 {
-	SceneManager::GetInstance().CreateScene(new DemoScene());
+	
 	//auto& scene = SceneManager::GetInstance().CreateScene("Demo");
-
+	SceneManager::GetInstance().CreateScene(pScene);
 
 }
 
@@ -57,12 +58,8 @@ void dae::Minigin::Cleanup()
 
 void dae::Minigin::Run()
 {
-	Initialize();
-
 	// tell the resource manager where he can find the game data
-	ResourceManager::GetInstance().Init("../Data/");
-
-	LoadGame();
+	
 
 	{
 		auto& renderer = Renderer::GetInstance();
@@ -97,5 +94,4 @@ void dae::Minigin::Run()
 		}
 	}
 
-	Cleanup();
 }
