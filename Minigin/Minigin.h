@@ -1,6 +1,6 @@
 #pragma once
 struct SDL_Window;
-namespace dae
+namespace LVB
 {
 	class GameScene;
 	class Minigin

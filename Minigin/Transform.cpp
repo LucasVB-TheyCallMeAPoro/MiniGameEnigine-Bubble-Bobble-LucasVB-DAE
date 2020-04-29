@@ -1,31 +1,33 @@
 #include "MiniginPCH.h"
 #include "Transform.h"
 
-dae::Transform::Transform()
+LVB::Transform::Transform(bool isStatic)
 	:m_Position{0,0,0}
+	,m_IsStatic{isStatic}
 {
 }
 
-dae::Transform::Transform(float x, float y, float z)
+LVB::Transform::Transform(float x, float y, float z, bool isStatic)
 	:m_Position{x,y,z}
+	,m_IsStatic{isStatic}
 {
 }
 
-void dae::Transform::SetPosition(const float x, const float y, const float z)
+void LVB::Transform::SetPosition(const float x, const float y, const float z)
 {
 	m_Position.x = x;
 	m_Position.y = y;
 	m_Position.z = z;
 }
 
-void dae::Transform::Initialize()
+void LVB::Transform::Initialize()
 {
 }
 
-void dae::Transform::Update(float)
+void LVB::Transform::Update(float)
 {
 }
 
-void dae::Transform::Render() const 
+void LVB::Transform::Render() const 
 {
 }

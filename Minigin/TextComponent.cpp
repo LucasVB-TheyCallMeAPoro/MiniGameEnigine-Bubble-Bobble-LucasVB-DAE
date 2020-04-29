@@ -7,11 +7,11 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include "GameObject.h"
-dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font) 
+LVB::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font) 
 	: m_NeedsUpdate(true), m_Text(text), m_Font(font), m_Texture(nullptr) , m_Color{ 255,255,255 }
 { }
 
-dae::TextComponent::~TextComponent()
+LVB::TextComponent::~TextComponent()
 {
 	if (m_Texture != nullptr)
 	{
@@ -20,7 +20,7 @@ dae::TextComponent::~TextComponent()
 	}
 }
 
-void dae::TextComponent::Update(float)
+void LVB::TextComponent::Update(float)
 {
 	if (m_NeedsUpdate)
 	{
@@ -42,7 +42,7 @@ void dae::TextComponent::Update(float)
 	}
 }
 
-void dae::TextComponent::Render() const
+void LVB::TextComponent::Render() const
 {
 	if (m_Texture != nullptr)
 	{
@@ -51,18 +51,18 @@ void dae::TextComponent::Render() const
 	}
 }
 
-void dae::TextComponent::Initialize()
+void LVB::TextComponent::Initialize()
 {
 }
 
 // This implementation uses the "dirty flag" pattern
-void dae::TextComponent::SetText(const std::string& text)
+void LVB::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_NeedsUpdate = true;
 }
 
-void dae::TextComponent::SetColor(const SDL_Color& color)
+void LVB::TextComponent::SetColor(const SDL_Color& color)
 {
 	m_Color = color;
 	m_NeedsUpdate = true;

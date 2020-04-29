@@ -48,10 +48,7 @@ void LVB::Minigin::Initialize()
  */
 void LVB::Minigin::LoadGame(GameScene* pScene) const
 {
-	
-	//auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 	SceneManager::GetInstance().CreateScene(pScene);
-
 }
 
 void LVB::Minigin::Cleanup()
@@ -90,6 +87,7 @@ void LVB::Minigin::Run()
 					nbOfFrames = fps;
 				sceneManager.SetNbOfFrames(nbOfFrames);
 				sceneManager.Update(std::chrono::duration_cast<std::chrono::duration<float>>(updateDuration).count());
+			
 				catchUp -= updateDuration;
 				nbOfFrames = 0;
 			}

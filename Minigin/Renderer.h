@@ -4,7 +4,7 @@
 struct SDL_Window;
 struct SDL_Renderer;
 
-namespace dae
+namespace LVB
 {
 	class Texture2D;
 	/**

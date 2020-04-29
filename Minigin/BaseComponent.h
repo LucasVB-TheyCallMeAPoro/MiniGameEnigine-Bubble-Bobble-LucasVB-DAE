@@ -1,6 +1,6 @@
 #pragma once
 
-namespace dae
+namespace LVB
 {
 	class GameObject;
 	class Transform;

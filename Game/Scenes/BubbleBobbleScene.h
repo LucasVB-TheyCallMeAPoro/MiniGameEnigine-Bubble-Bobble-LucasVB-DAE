@@ -5,6 +5,7 @@ namespace LVB
 	class GameObject;
 	class BubbleBobbleScene : public LVB::GameScene
 	{		
+	public:
 		BubbleBobbleScene();
 
 		BubbleBobbleScene(const BubbleBobbleScene& other) = delete;
@@ -15,10 +16,8 @@ namespace LVB
 	protected:
 		void Initialize() override;
 		void Update(float) override;
+		void LateUpdate(float) override;
 		void Render() override;
-
-		GameObject* m_fpsCounter;
-
 	};
 }
 

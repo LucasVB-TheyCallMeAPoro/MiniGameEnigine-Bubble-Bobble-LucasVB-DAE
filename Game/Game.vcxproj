@@ -151,14 +151,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BubbleBobbleScene.cpp" />
+    <ClCompile Include="Scenes\BubbleBobbleScene.cpp" />
     <ClCompile Include="Commands\GameCommands.cpp" />
     <ClCompile Include="Scenes\CommandAssignmentScene.cpp" />
     <ClCompile Include="Scenes\DemoScene.cpp" />
     <ClCompile Include="MainGame.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BubbleBobbleScene.h" />
+    <ClInclude Include="Scenes\BubbleBobbleScene.h" />
     <ClInclude Include="Commands\GameCommands.h" />
     <ClInclude Include="Scenes\CommandAssignmentScene.h" />
     <ClInclude Include="Scenes\DemoScene.h" />

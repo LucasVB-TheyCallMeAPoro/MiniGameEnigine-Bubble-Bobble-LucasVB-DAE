@@ -5,7 +5,7 @@
 #include "Transform.h"
 #include "BaseComponent.h"
 #include "Texture2D.h"
-dae::GameObject::GameObject()
+LVB::GameObject::GameObject()
 	:m_pComponents{ std::vector<BaseComponent*>{} }
 	,m_pTransform{nullptr}
 {
@@ -13,7 +13,7 @@ dae::GameObject::GameObject()
 	AddComponent(m_pTransform);
 }
 
-dae::GameObject::~GameObject()
+LVB::GameObject::~GameObject()
 {
 	for (BaseComponent* pComp : m_pComponents)
 	{
@@ -27,7 +27,7 @@ dae::GameObject::~GameObject()
 	}
 }
 
-void dae::GameObject::AddComponent(BaseComponent * pComp)
+void LVB::GameObject::AddComponent(BaseComponent * pComp)
 {
 	if (typeid(*pComp) == typeid(Transform) && HasComponent<Transform>())
 	{
@@ -48,7 +48,7 @@ void dae::GameObject::AddComponent(BaseComponent * pComp)
 	pComp->SetGameObject(this);
 }
 
-void dae::GameObject::RemoveComponent(BaseComponent* pComp)
+void LVB::GameObject::RemoveComponent(BaseComponent* pComp)
 {
 	auto it = find(m_pComponents.begin(), m_pComponents.end(), pComp);
 
@@ -68,7 +68,7 @@ void dae::GameObject::RemoveComponent(BaseComponent* pComp)
 	pComp->SetGameObject(nullptr);
 }
 
-void dae::GameObject::Update(float elapsedSec)
+void LVB::GameObject::Update(float elapsedSec)
 {
 	//std::cout << m_pComponents.size() << std::endl;
 	for (BaseComponent* pComp : m_pComponents)
@@ -78,7 +78,7 @@ void dae::GameObject::Update(float elapsedSec)
 
 }
 
-void dae::GameObject::Render() const
+void LVB::GameObject::Render() const
 {
 	const auto pos = m_pTransform->GetPosition();
 	if(m_Texture != nullptr)
@@ -89,12 +89,12 @@ void dae::GameObject::Render() const
 	}
 }
 
-void dae::GameObject::SetTexture(const std::string& filename)
+void LVB::GameObject::SetTexture(const std::string& filename)
 {
 	m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
-void dae::GameObject::SetPosition(float x, float y)
+void LVB::GameObject::SetPosition(float x, float y)
 {
 	m_pTransform->SetPosition(x, y, 0.0f);
 }

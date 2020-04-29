@@ -2,13 +2,13 @@
 #include "BaseComponent.h"
 #include "Transform.h"
 #include "GameObject.h"
-using namespace dae;
+using namespace LVB;
 BaseComponent::BaseComponent() 
 	: m_pGameObject(nullptr)
 {
 }
 
-dae::Transform* BaseComponent::GetTransform() const
+LVB::Transform* BaseComponent::GetTransform() const
 {
 	if (m_pGameObject == nullptr)
 	{
@@ -19,7 +19,7 @@ dae::Transform* BaseComponent::GetTransform() const
 	return m_pGameObject->GetTransform();
 }
 
-void dae::BaseComponent::SetGameObject(GameObject* go)
+void LVB::BaseComponent::SetGameObject(GameObject* go)
 {
 	m_pGameObject = go;
 }

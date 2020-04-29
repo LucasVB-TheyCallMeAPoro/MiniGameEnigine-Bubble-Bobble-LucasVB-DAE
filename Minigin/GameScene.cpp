@@ -1,13 +1,13 @@
 #include "MiniginPCH.h"
 #include "GameScene.h"
 #include "GameObject.h"
-dae::GameScene::GameScene(std::string sceneName)
+LVB::GameScene::GameScene(std::string sceneName)
 	:m_SceneName{sceneName}
 	,m_pGameObjects(std::vector<GameObject*>())
 {
 }
 
-dae::GameScene::~GameScene()
+LVB::GameScene::~GameScene()
 {
 	for (auto pGO : m_pGameObjects)
 	{
@@ -16,7 +16,7 @@ dae::GameScene::~GameScene()
 	}
 }
 
-void dae::GameScene::AddGameObject(GameObject* obj)
+void LVB::GameScene::AddGameObject(GameObject* obj)
 {
 	if (obj == nullptr)
 	{
@@ -27,7 +27,7 @@ void dae::GameScene::AddGameObject(GameObject* obj)
 	m_pGameObjects.push_back(obj);
 }
 
-void dae::GameScene::RemoveGameObject(GameObject* obj)
+void LVB::GameScene::RemoveGameObject(GameObject* obj)
 {
 	const auto it = find(m_pGameObjects.begin(), m_pGameObjects.end(), obj);
 	if (it == m_pGameObjects.end())
@@ -41,7 +41,7 @@ void dae::GameScene::RemoveGameObject(GameObject* obj)
 	obj = nullptr;
 }
 
-const std::vector<dae::GameObject*>& dae::GameScene::GetGameObjects() const
+const std::vector<LVB::GameObject*>& LVB::GameScene::GetGameObjects() const
 {
 	return m_pGameObjects;
 }

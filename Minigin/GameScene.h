@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-namespace dae
+namespace LVB
 {
 	class GameObject;
 	class SceneManager;
@@ -24,6 +24,7 @@ namespace dae
 	protected:
 		virtual void Initialize() = 0;
 		virtual void Update(float) = 0;
+		virtual void LateUpdate(float) = 0;
 		virtual void Render() = 0;
 
 		virtual void SceneActivated() {}

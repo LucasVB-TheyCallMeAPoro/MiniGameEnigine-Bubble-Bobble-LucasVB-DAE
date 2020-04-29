@@ -1,5 +1,5 @@
 #pragma once
-namespace dae
+namespace LVB
 {
 	template <typename T>
 	class Singleton

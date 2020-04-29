@@ -27,7 +27,7 @@
     <ClCompile Include="Commands\GameCommands.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BubbleBobbleScene.cpp">
+    <ClCompile Include="Scenes\BubbleBobbleScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClInclude Include="Commands\GameCommands.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BubbleBobbleScene.h">
+    <ClInclude Include="Scenes\BubbleBobbleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

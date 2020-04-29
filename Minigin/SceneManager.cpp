@@ -1,28 +1,57 @@
 #include "MiniginPCH.h"
 #include "SceneManager.h"
 #include "GameScene.h"
-void dae::SceneManager::Update(float elapsed)
+void LVB::SceneManager::Update(float elapsed)
 {
-	for (GameScene* scene : m_GameScenes)
+	if (m_NewActiveScene != nullptr)
 	{
-		scene->Update(elapsed);
+		//Set New Scene
+		m_ActiveScene = m_NewActiveScene;
+		m_NewActiveScene = nullptr;
+	}
+
+	if (m_ActiveScene != nullptr)
+	{
+		m_ActiveScene->Update(elapsed);
 	}
 }
 
-int dae::SceneManager::GetNumberOfFrames() const
+void LVB::SceneManager::LateUpdate(float elapsed)
+{
+	m_ActiveScene->LateUpdate(elapsed);
+}
+
+void LVB::SceneManager::SetActiveGameScene(std::string name)
+{
+	const auto it = std::find_if(m_GameScenes.begin(), m_GameScenes.end(), [name](GameScene* scene)
+		{
+			
+			return scene->m_SceneName == name;
+		});
+
+	if (it != m_GameScenes.end())
+	{
+		m_NewActiveScene = *it;
+	}
+}
+
+int LVB::SceneManager::GetNumberOfFrames() const
 {
 	return m_NrOfFrames;
 }
 
-void dae::SceneManager::Render()
+void LVB::SceneManager::Render()
 {
-	for (GameScene* scene : m_GameScenes)
-	{
-		scene->Render();
-	}
+	m_ActiveScene->Render();
 }
 
-dae::SceneManager::~SceneManager()
+LVB::SceneManager::SceneManager()
+	:m_ActiveScene{nullptr}
+	, m_NewActiveScene{ nullptr }	
+{
+}
+
+LVB::SceneManager::~SceneManager()
 {
 	for (int i{ 0 }; i < m_GameScenes.size(); ++i)
 	{
@@ -30,17 +59,23 @@ dae::SceneManager::~SceneManager()
 	}
 }
 
-void dae::SceneManager::CreateScene(GameScene* gs)
+void LVB::SceneManager::CreateScene(GameScene* gs)
 {
 	const auto it = std::find(m_GameScenes.begin(), m_GameScenes.end(), gs);
 
 	if (it == m_GameScenes.end())
 	{
 		m_GameScenes.push_back(gs);
+		if (m_ActiveScene == nullptr)
+			m_ActiveScene = gs;
+	}
+	else
+	{
+		std::cout << "GameScene already exists!\n";
 	}
 }
 
-void dae::SceneManager::SetNbOfFrames(int frames)
+void LVB::SceneManager::SetNbOfFrames(int frames)
 {
 	m_NrOfFrames = frames;
 }

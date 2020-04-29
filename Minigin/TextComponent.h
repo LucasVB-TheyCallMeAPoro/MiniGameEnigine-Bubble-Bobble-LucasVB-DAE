@@ -1,7 +1,7 @@
 #pragma once
 #include "Transform.h"
 #include <SDL.h>
-namespace dae
+namespace LVB
 {
 	class Font;
 	class Texture2D;

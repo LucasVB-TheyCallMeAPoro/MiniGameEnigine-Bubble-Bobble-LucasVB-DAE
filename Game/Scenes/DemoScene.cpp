@@ -4,14 +4,14 @@
 #include "TextComponent.h"
 #include "ResourceManager.h"
 #include "SceneManager.h"
-dae::DemoScene::DemoScene()
+LVB::DemoScene::DemoScene()
 	:GameScene("DemoScene")
 	,m_fpsCounter{nullptr}
 {
 	Initialize();
 }
 
-void dae::DemoScene::Initialize()
+void LVB::DemoScene::Initialize()
 {
 	auto go = new GameObject{};
 	go->SetTexture("background.jpg");
@@ -39,7 +39,7 @@ void dae::DemoScene::Initialize()
 
 }
 
-void dae::DemoScene::Update(float elapsedSec)
+void LVB::DemoScene::Update(float elapsedSec)
 {
 	std::string text = "FPS: ";
 	int fps = SceneManager::GetInstance().GetNumberOfFrames();
@@ -52,7 +52,7 @@ void dae::DemoScene::Update(float elapsedSec)
 	
 }
 
-void dae::DemoScene::Render()
+void LVB::DemoScene::Render()
 {
 	for (GameObject* object : GetGameObjects())
 	{
