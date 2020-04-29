@@ -3,7 +3,7 @@
 #include <SDL.h>
 
 
-bool dae::InputManager::ProcessInput()
+bool LVB::InputManager::ProcessInput()
 {
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
 	
@@ -28,7 +28,7 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
-void dae::InputManager::HandleInput() const
+void LVB::InputManager::HandleInput() const
 {
 	if (m_ControllerCheck)
 	{
@@ -45,17 +45,17 @@ void dae::InputManager::HandleInput() const
 	}
 }
 
-void dae::InputManager::BindToKeyboard(SDL_Scancode key, Command* c)
+void LVB::InputManager::BindToKeyboard(SDL_Scancode key, Command* c)
 {
 	m_KeyboardControls.emplace(key, c);
 }
 
-void dae::InputManager::BindToController(ControllerButton button, Command* c)
+void LVB::InputManager::BindToController(ControllerButton button, Command* c)
 {
 	m_ControllerControls.emplace(button, c);
 }
 
-Command* dae::InputManager::UnbindKeyboard(SDL_Scancode key)
+Command* LVB::InputManager::UnbindKeyboard(SDL_Scancode key)
 {
 	Command* c{};
 	auto it = m_KeyboardControls.find(key);
@@ -66,7 +66,7 @@ Command* dae::InputManager::UnbindKeyboard(SDL_Scancode key)
 	return c;
 }
 
-Command* dae::InputManager::UnbindController(ControllerButton button)
+Command* LVB::InputManager::UnbindController(ControllerButton button)
 {
 	Command* c{};
 	auto it = m_ControllerControls.find(button);
@@ -77,13 +77,25 @@ Command* dae::InputManager::UnbindController(ControllerButton button)
 	return c;
 }
 
-void dae::InputManager::RebindKeyboard(SDL_Scancode oldKey, SDL_Scancode newKey)
+void LVB::InputManager::RebindKeyboard(SDL_Scancode oldKey, SDL_Scancode newKey)
 {
 	BindToKeyboard(newKey, UnbindKeyboard(oldKey));
 }
 
-void dae::InputManager::RebindController(ControllerButton oldKey, ControllerButton newKey)
+void LVB::InputManager::RebindController(ControllerButton oldKey, ControllerButton newKey)
 {
 	BindToController(newKey, UnbindController(oldKey));
+}
+
+LVB::InputManager::~InputManager()
+{
+	for (const auto& button : m_ControllerControls)
+	{
+		delete button.second;
+	}
+	for (const auto& key : m_KeyboardControls)
+	{
+		delete key.second;
+	}
 }
 

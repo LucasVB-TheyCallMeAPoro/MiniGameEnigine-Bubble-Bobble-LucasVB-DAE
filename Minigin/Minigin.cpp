@@ -10,10 +10,16 @@
 #include "TextComponent.h"
 #include "GameObject.h"
 #include "GameScene.h"
+
+#if _DEBUG
+// ReSharper disable once CppUnusedIncludeDirective
+#include <vld.h>
+#endif
+
 using namespace std;
 using namespace std::chrono;
 
-void dae::Minigin::Initialize()
+void LVB::Minigin::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
@@ -40,7 +46,7 @@ void dae::Minigin::Initialize()
 /**
  * Code constructing the scene world starts here
  */
-void dae::Minigin::LoadGame(GameScene* pScene) const
+void LVB::Minigin::LoadGame(GameScene* pScene) const
 {
 	
 	//auto& scene = SceneManager::GetInstance().CreateScene("Demo");
@@ -48,7 +54,7 @@ void dae::Minigin::LoadGame(GameScene* pScene) const
 
 }
 
-void dae::Minigin::Cleanup()
+void LVB::Minigin::Cleanup()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
@@ -56,11 +62,8 @@ void dae::Minigin::Cleanup()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run()
+void LVB::Minigin::Run()
 {
-	// tell the resource manager where he can find the game data
-	
-
 	{
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();

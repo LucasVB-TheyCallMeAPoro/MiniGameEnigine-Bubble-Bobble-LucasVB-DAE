@@ -1,6 +1,6 @@
 #pragma once
 #include "GameScene.h"
-namespace dae
+namespace LVB
 {
 	class GameObject;
 	class DemoScene : public GameScene

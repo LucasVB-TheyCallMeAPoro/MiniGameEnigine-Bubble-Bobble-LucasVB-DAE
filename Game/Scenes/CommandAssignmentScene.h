@@ -1,12 +1,12 @@
 #pragma once
 #include <GameScene.h>
-namespace dae
+namespace LVB
 {
 	class CommandAssignmentScene : public GameScene
 	{
 	public:
 		CommandAssignmentScene();
-
+	
 		CommandAssignmentScene(const CommandAssignmentScene& other) = delete;
 		CommandAssignmentScene(CommandAssignmentScene&& other) noexcept = delete;
 		CommandAssignmentScene& operator=(const CommandAssignmentScene& other) = delete;
