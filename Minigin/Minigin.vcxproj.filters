@@ -81,6 +81,9 @@
     <ClInclude Include="Structs.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Spritesheet.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -136,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="BaseCollider.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Spritesheet.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

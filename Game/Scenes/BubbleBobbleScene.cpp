@@ -1,6 +1,7 @@
 #include "BubbleBobbleScene.h"
 #include "GameObject.h"
 #include "BoxCollider.h"
+#include "../Character.h"
 LVB::BubbleBobbleScene::BubbleBobbleScene()
 	:GameScene("Gamescene")
 {
@@ -9,7 +10,7 @@ LVB::BubbleBobbleScene::BubbleBobbleScene()
 
 void LVB::BubbleBobbleScene::Initialize()
 {
-	GameObject* player{};
+	Character* player = new Character{Character::Type::bob,8,1,16};
 	player->AddComponent(new BoxCollider{ glm::vec2{2,2},3,3 });
 	this->AddGameObject(player);
 }
@@ -22,6 +23,6 @@ void LVB::BubbleBobbleScene::LateUpdate(float)
 {
 
 }
-void LVB::BubbleBobbleScene::Render()
+void LVB::BubbleBobbleScene::Render() const
 {
 }

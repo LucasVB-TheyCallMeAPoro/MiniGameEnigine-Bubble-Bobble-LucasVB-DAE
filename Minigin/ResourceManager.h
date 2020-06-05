@@ -1,6 +1,6 @@
 #pragma once
 #include "Singleton.h"
-
+#include <memory>
 namespace LVB
 {
 	class Texture2D;

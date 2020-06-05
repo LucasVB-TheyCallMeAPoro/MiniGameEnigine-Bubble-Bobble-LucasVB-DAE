@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
-
+#include <string>
+#include <vector>
 namespace LVB
 {
 	class GameScene;

@@ -16,7 +16,8 @@ namespace LVB
 	protected:
 		void Initialize() override;
 		void Update(float) override;
-		void Render() override;
+		void LateUpdate(float) override;
+		void Render() const override;
 
 		GameObject* m_fpsCounter;
 	};

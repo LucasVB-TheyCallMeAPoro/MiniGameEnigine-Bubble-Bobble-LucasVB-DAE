@@ -15,4 +15,5 @@ SDL_Texture* LVB::Texture2D::GetSDLTexture() const
 LVB::Texture2D::Texture2D(SDL_Texture* texture)
 {
 	m_Texture = texture;
+	SDL_QueryTexture(texture, nullptr, nullptr, &m_Width, &m_Height);
 }

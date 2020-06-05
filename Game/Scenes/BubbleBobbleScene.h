@@ -17,7 +17,7 @@ namespace LVB
 		void Initialize() override;
 		void Update(float) override;
 		void LateUpdate(float) override;
-		void Render() override;
+		void Render() const override;
 	};
 }
 

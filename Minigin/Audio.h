@@ -24,6 +24,8 @@ public:
 	static void Init() { audioService = &defaultAudioService; }
 	static  Audio& GetAudio() { return *audioService; }
 	static void RegisterAudioService(Audio* service);
+
+	static void RemoveAudio() { delete audioService; }
 private:
 	static Audio* audioService;
 	static NullAudio defaultAudioService;

@@ -24,6 +24,6 @@ void LVB::CommandAssignmentScene::Update(float)
 	InputManager::GetInstance().HandleInput();
 }
 
-void LVB::CommandAssignmentScene::Render()
+void LVB::CommandAssignmentScene::Render() const
 {
 }

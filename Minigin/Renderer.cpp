@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include "SceneManager.h"
 #include "Texture2D.h"
-
+#include "Spritesheet.h"
 void LVB::Renderer::Init(SDL_Window * window)
 {
 	m_Renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -48,4 +48,16 @@ void LVB::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	dst.w = static_cast<int>(width);
 	dst.h = static_cast<int>(height);
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+}
+
+void LVB::Renderer::RenderSprite(const Sprite& sprite, const float x, const float y)
+{
+	SDL_Rect src{ sprite.GetSourceRect() };
+	SDL_Rect dst{};
+	dst.x = static_cast<int>(x);
+	dst.y = static_cast<int>(y);
+	dst.w = src.w;
+	dst.h = src.h;
+	SDL_RenderCopy(GetSDLRenderer(), sprite.GetSpriteSheet()->GetTexture()->GetSDLTexture(), &src, &dst);
+	
 }

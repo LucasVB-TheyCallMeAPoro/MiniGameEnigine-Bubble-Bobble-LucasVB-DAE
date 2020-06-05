@@ -45,3 +45,19 @@ const std::vector<LVB::GameObject*>& LVB::GameScene::GetGameObjects() const
 {
 	return m_pGameObjects;
 }
+
+void LVB::GameScene::RootRender() const
+{
+	for (GameObject* object : GetGameObjects())
+	{
+		object->RootRender();
+	}
+}
+void LVB::GameScene::RootUpdate(float elapsedSec)
+{
+	Update(elapsedSec);
+	for (GameObject* object : GetGameObjects())
+	{
+		object->RootUpdate(elapsedSec);
+	}
+}

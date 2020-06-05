@@ -16,7 +16,12 @@ namespace LVB
 		Texture2D(Texture2D &&) = delete;
 		Texture2D & operator= (const Texture2D &) = delete;
 		Texture2D & operator= (const Texture2D &&) = delete;
+
+		int GetWidth() const { return m_Width; }
+		int GetHeight() const { return m_Height; }
 	private:
 		SDL_Texture* m_Texture;
+		int m_Width;
+		int m_Height;
 	};
 }

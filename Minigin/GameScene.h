@@ -25,12 +25,15 @@ namespace LVB
 		virtual void Initialize() = 0;
 		virtual void Update(float) = 0;
 		virtual void LateUpdate(float) = 0;
-		virtual void Render() = 0;
+		virtual void Render() const = 0;
 
 		virtual void SceneActivated() {}
 		virtual void SceneDeactivated() {}
 
 	private:
+
+		void RootRender() const;
+		void RootUpdate(float elapsed);
 		friend class SceneManager;
 		std::vector<GameObject*> m_pGameObjects;
 		std::string m_SceneName;

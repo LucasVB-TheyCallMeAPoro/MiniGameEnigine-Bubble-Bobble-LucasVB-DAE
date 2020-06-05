@@ -91,10 +91,10 @@ void LVB::BoxCollider::Update(float)
 
 void LVB::BoxCollider::Render() const
 {
-    glBegin(GL_LINE_LOOP);
+    /*glBegin(GL_LINE_LOOP);
     glVertex2f(m_Box.bottemLeft.x, m_Box.bottemLeft.y);
     glVertex2f(m_Box.bottemLeft.x + m_Box.width, m_Box.bottemLeft.y);
     glVertex2f(m_Box.bottemLeft.x + m_Box.width, m_Box.bottemLeft.y + m_Box.height);
     glVertex2f(m_Box.bottemLeft.x, m_Box.bottemLeft.y + m_Box.height);
-    glEnd();
+    glEnd();*/
 }

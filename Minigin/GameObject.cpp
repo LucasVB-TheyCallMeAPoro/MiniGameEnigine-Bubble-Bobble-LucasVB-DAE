@@ -5,9 +5,15 @@
 #include "Transform.h"
 #include "BaseComponent.h"
 #include "Texture2D.h"
+#include "Spritesheet.h"
+
 LVB::GameObject::GameObject()
 	:m_pComponents{ std::vector<BaseComponent*>{} }
 	,m_pTransform{nullptr}
+	,m_IsActive{true}
+	,m_Sprite{nullptr}
+	,m_SpriteSheet{nullptr}
+	,m_Texture{nullptr}
 {
 	m_pTransform = new Transform();
 	AddComponent(m_pTransform);
@@ -24,6 +30,16 @@ LVB::GameObject::~GameObject()
 	{
 		delete m_Texture;
 		m_Texture = nullptr;
+	}
+	if (m_Sprite != nullptr)
+	{
+		delete m_Sprite;
+		m_Sprite = nullptr;
+	}
+	if (m_SpriteSheet != nullptr)
+	{
+		delete m_SpriteSheet;
+		m_SpriteSheet = nullptr;
 	}
 }
 
@@ -68,9 +84,24 @@ void LVB::GameObject::RemoveComponent(BaseComponent* pComp)
 	pComp->SetGameObject(nullptr);
 }
 
-void LVB::GameObject::Update(float elapsedSec)
+void LVB::GameObject::Update(float)
 {
-	//std::cout << m_pComponents.size() << std::endl;
+
+}
+
+void LVB::GameObject::Render() const
+{
+	
+}
+
+void LVB::GameObject::RootUpdate(float elapsedSec)
+{
+	if (!m_IsActive)
+		return;
+
+	Update(elapsedSec);
+
+	//Component Update
 	for (BaseComponent* pComp : m_pComponents)
 	{
 		pComp->Update(elapsedSec);
@@ -78,11 +109,15 @@ void LVB::GameObject::Update(float elapsedSec)
 
 }
 
-void LVB::GameObject::Render() const
+void LVB::GameObject::RootRender() const
 {
 	const auto pos = m_pTransform->GetPosition();
-	if(m_Texture != nullptr)
+	if (m_Texture != nullptr && m_Sprite == nullptr)
 		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+	if (m_Sprite != nullptr)
+		Renderer::GetInstance().RenderSprite(*m_Sprite, pos.x, pos.y);
+
+	Render();
 	for (BaseComponent* pComp : m_pComponents)
 	{
 		pComp->Render();
@@ -92,6 +127,17 @@ void LVB::GameObject::Render() const
 void LVB::GameObject::SetTexture(const std::string& filename)
 {
 	m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
+}
+
+void LVB::GameObject::SetSprite(const glm::ivec2& origin, int spriteWidth, int spriteHeight, int columnCount, int rowCount)
+{
+	if (m_Texture == nullptr)
+	{
+		std::cout << "You forgot to add your texture!\n";
+		return;
+	}
+	m_SpriteSheet = new SpriteSheet(m_Texture, origin, spriteWidth, spriteHeight, columnCount, rowCount);
+	m_Sprite = new Sprite(m_SpriteSheet);
 }
 
 void LVB::GameObject::SetPosition(float x, float y)

@@ -10,7 +10,7 @@
 #include "TextComponent.h"
 #include "GameObject.h"
 #include "GameScene.h"
-
+#include "Audio.h"
 #if _DEBUG
 // ReSharper disable once CppUnusedIncludeDirective
 #include <vld.h>
@@ -56,6 +56,7 @@ void LVB::Minigin::Cleanup()
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
+	ServiceLocator::RemoveAudio();
 	SDL_Quit();
 }
 
@@ -83,11 +84,11 @@ void LVB::Minigin::Run()
 			
 			while (catchUp >= updateDuration)
 			{
-				if ((1000 / nbOfFrames) > fps)
-					nbOfFrames = fps;
+			/*	if ((1000 / nbOfFrames) > fps)
+					nbOfFrames = fps;*/
 				sceneManager.SetNbOfFrames(nbOfFrames);
 				sceneManager.Update(std::chrono::duration_cast<std::chrono::duration<float>>(updateDuration).count());
-			
+				sceneManager.LateUpdate(std::chrono::duration_cast<std::chrono::duration<float>>(updateDuration).count());
 				catchUp -= updateDuration;
 				nbOfFrames = 0;
 			}

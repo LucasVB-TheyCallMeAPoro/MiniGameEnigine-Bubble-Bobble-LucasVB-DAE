@@ -45,17 +45,16 @@ void LVB::DemoScene::Update(float elapsedSec)
 	int fps = SceneManager::GetInstance().GetNumberOfFrames();
 	text += std::to_string(fps);
 	m_fpsCounter->GetComponent<TextComponent>()->SetText(text);
-	for (auto& object : GetGameObjects())
-	{
-		object->Update(elapsedSec);
-	}
+
+
 	
 }
 
-void LVB::DemoScene::Render()
+void LVB::DemoScene::LateUpdate(float)
 {
-	for (GameObject* object : GetGameObjects())
-	{
-		object->Render();
-	}
+}
+
+void LVB::DemoScene::Render() const
+{
+
 }

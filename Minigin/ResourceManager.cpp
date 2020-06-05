@@ -33,12 +33,13 @@ void LVB::ResourceManager::Init(const std::string& dataPath)
 LVB::Texture2D* LVB::ResourceManager::LoadTexture(const std::string& file) const
 {
 	const auto fullPath = m_DataPath + file;
+
 	auto texture = IMG_LoadTexture(Renderer::GetInstance().GetSDLRenderer(), fullPath.c_str());
 	if (texture == nullptr) 
 	{
 		throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
 	}
-	Texture2D* tex  = new Texture2D{ texture };
+	Texture2D* tex  = new Texture2D{ texture};
 	return tex;
 }
 

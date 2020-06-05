@@ -12,13 +12,14 @@ void LVB::SceneManager::Update(float elapsed)
 
 	if (m_ActiveScene != nullptr)
 	{
-		m_ActiveScene->Update(elapsed);
+		m_ActiveScene->RootUpdate(elapsed);
 	}
 }
 
 void LVB::SceneManager::LateUpdate(float elapsed)
 {
 	m_ActiveScene->LateUpdate(elapsed);
+	
 }
 
 void LVB::SceneManager::SetActiveGameScene(std::string name)
@@ -42,7 +43,7 @@ int LVB::SceneManager::GetNumberOfFrames() const
 
 void LVB::SceneManager::Render()
 {
-	m_ActiveScene->Render();
+	m_ActiveScene->RootRender();
 }
 
 LVB::SceneManager::SceneManager()
