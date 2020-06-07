@@ -9,8 +9,9 @@ LVB::Sprite::Sprite(const SpriteSheet* sheet)
 }
 void LVB::Sprite::SetIndex(int i)
 {
+	m_Index = i;
 	int total = m_SourceTexture->GetColumnCount() * m_SourceTexture->GetRowCount();
-	m_Index = i % total;
+	m_Index %= total;
 }
 
 void LVB::Sprite::IncrementIndex()
@@ -21,11 +22,10 @@ void LVB::Sprite::IncrementIndex()
 SDL_Rect LVB::Sprite::GetSourceRect() const
 {
 	SDL_Rect rect{};
-
 	rect.w = m_SourceTexture->GetSpriteWidth();
 	rect.h = m_SourceTexture->GetSpriteHeight();
-	rect.x = m_SourceTexture->GetOrigin().x + (m_Index * rect.w) % m_SourceTexture->GetColumnCount();
-	rect.y = m_SourceTexture->GetOrigin().y + (m_Index * rect.h) / m_SourceTexture->GetColumnCount();
+	rect.x = m_SourceTexture->GetOrigin().x + ((m_Index ) % m_SourceTexture->GetColumnCount()) * rect.w;
+	rect.y = m_SourceTexture->GetOrigin().y + (m_Index ) / m_SourceTexture->GetColumnCount() * rect.h;
 
 	return rect;
 }

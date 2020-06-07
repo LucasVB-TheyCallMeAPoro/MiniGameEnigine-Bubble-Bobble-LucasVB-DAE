@@ -16,6 +16,7 @@ protected:
 	virtual void Render() const override;
 	virtual void Update(float elapsedSec) override;
 private:
+	float m_AnimTime;
 	Type m_Type;
 };
 

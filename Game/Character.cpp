@@ -6,17 +6,23 @@
 #include "Spritesheet.h"
 Character::Character(Character::Type type, int columnCount, int rowCount, int totalRowCount)
 	:m_Type{type}
-
+	,m_AnimTime{0.f}
 {
 	SetTexture("BBSprites/Sprites0.png");
-	SetSprite(glm::ivec2(0, GetTexture()->GetHeight() / totalRowCount + static_cast<unsigned int>(m_Type) * 2), GetTexture()->GetWidth() / columnCount, GetTexture()->GetHeight() / totalRowCount, columnCount, rowCount);
+	int spriteHeight = GetTexture()->GetHeight() / totalRowCount;
+	SetSprite(glm::ivec2(0, GetTexture()->GetHeight() / totalRowCount + static_cast<unsigned int>(m_Type) * spriteHeight * 2), GetTexture()->GetWidth() / columnCount, spriteHeight, columnCount, rowCount);
 }
 
 void Character::Render() const
 {
 }
 
-void Character::Update(float)
+void Character::Update(float elapsedSec)
 {
-	
+	m_AnimTime += elapsedSec;
+	if (m_AnimTime >= (1.f / this->GetSprite()->GetSpriteSheet()->GetColumnCount()))
+	{
+		m_AnimTime = 0;
+		this->GetSprite()->IncrementIndex();
+	}
 }

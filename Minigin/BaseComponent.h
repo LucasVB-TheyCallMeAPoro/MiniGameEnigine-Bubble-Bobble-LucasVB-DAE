@@ -17,6 +17,7 @@ namespace LVB
 		GameObject* GetGameObject() const { return m_pGameObject; }
 		Transform* GetTransform() const;
 		void SetGameObject(GameObject* go);
+
 		virtual void Render() const = 0;
 		virtual void Update(float elapsedSec) = 0;
 		virtual void Initialize() = 0;

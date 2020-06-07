@@ -1,13 +1,14 @@
 #pragma once
+#include "BaseCollider.h"
+#include "Structs.h"
 #pragma warning(push)
 #pragma warning (disable:4201)
-#include "BaseCollider.h"
 #include <glm/vec2.hpp>
-#include "Structs.h"
 #pragma warning(pop)
 
 namespace LVB
 {
+
 	class BoxCollider : public BaseCollider
 	{
 	public:
@@ -22,13 +23,12 @@ namespace LVB
 		virtual void ResolveOverlap(const Collision & m) override;
 
 		const Rectf& GetBox() const { return m_Box; }
-		
-	private:
-		Rectf m_Box;
+
 		virtual void Initialize() override;
 		virtual void Update(float elapsedSec) override;
 		virtual void Render() const override;
-
+	private:
+		Rectf m_Box;
 		
 	};
 }

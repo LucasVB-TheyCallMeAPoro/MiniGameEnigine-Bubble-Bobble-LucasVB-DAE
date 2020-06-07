@@ -115,7 +115,10 @@ void LVB::GameObject::RootRender() const
 	if (m_Texture != nullptr && m_Sprite == nullptr)
 		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 	if (m_Sprite != nullptr)
+	{
 		Renderer::GetInstance().RenderSprite(*m_Sprite, pos.x, pos.y);
+		
+	}
 
 	Render();
 	for (BaseComponent* pComp : m_pComponents)

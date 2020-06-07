@@ -4,8 +4,8 @@
 #include <memory>
 namespace LVB
 {
-    //The collider classes are mad using this site http://thatgamesguy.co.uk/cpp-game-dev-15/
-    //Some function are mad using this site https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-detection
+    //The collider classes are made using this site http://thatgamesguy.co.uk/cpp-game-dev-15/
+    //Some function are made using this site https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-detection
     enum class CollisionLayer
     {
         Default = 1,    // bit 0
@@ -31,6 +31,9 @@ namespace LVB
             CollisionLayer GetLayer() const;
             void SetLayer(CollisionLayer layer);
 
+        virtual void Initialize() = 0;
+        virtual void Update(float elapsedSec)= 0;
+        virtual void Render() const = 0;
         private:
             CollisionLayer m_Layer;
 
