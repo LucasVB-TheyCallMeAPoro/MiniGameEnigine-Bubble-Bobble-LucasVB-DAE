@@ -1,5 +1,6 @@
 #pragma once
 #include <GameScene.h>
+#include "../GameBase/Level.h"
 namespace LVB
 {
 	class GameObject;
@@ -18,6 +19,9 @@ namespace LVB
 		void Update(float) override;
 		void LateUpdate(float) override;
 		void Render() const override;
+	private:
+		Level m_Level;
+
 	};
 }
 

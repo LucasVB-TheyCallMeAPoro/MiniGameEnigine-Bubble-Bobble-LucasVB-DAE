@@ -54,10 +54,10 @@ void LVB::Renderer::RenderSprite(const Sprite& sprite, const float x, const floa
 {
 	SDL_Rect src{ sprite.GetSourceRect() };
 	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	dst.w = src.w;
-	dst.h = src.h;
+	dst.x = static_cast<int>((x - m_CameraOrigin.x) * m_Scale);
+	dst.y = static_cast<int>((y - m_CameraOrigin.y) * m_Scale);
+	dst.w = static_cast<int>(src.w * m_Scale);
+	dst.h = static_cast<int>(src.h * m_Scale);
 	SDL_RenderCopy(GetSDLRenderer(), sprite.GetSpriteSheet()->GetTexture()->GetSDLTexture(), &src, &dst);
 	
 }

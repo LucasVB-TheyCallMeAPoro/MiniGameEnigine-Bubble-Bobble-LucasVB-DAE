@@ -84,6 +84,9 @@
     <ClInclude Include="Spritesheet.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="BinaryReader.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -141,6 +144,9 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Spritesheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
