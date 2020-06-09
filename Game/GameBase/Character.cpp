@@ -13,7 +13,7 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(70, 10);
+	bodyDef.position.Set(70, 5);
 	
 	m_RigidBody = world->CreateBody(&bodyDef);
 
@@ -29,7 +29,7 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	m_RigidBody->SetSleepingAllowed(false);
 	m_RigidBody->SetAwake(true);
 
-	m_RigidBody->ApplyForceToCenter({ 10,0 }, true);
+	
 	SetTexture("BBSprites/Sprites0.png");
 	int spriteHeight = GetTexture()->GetHeight() / totalRowCount;
 	SetSprite(glm::ivec2(0, GetTexture()->GetHeight() / totalRowCount + static_cast<unsigned int>(m_Type) * spriteHeight * 2), GetTexture()->GetWidth() / columnCount, spriteHeight, columnCount, rowCount);
@@ -49,6 +49,7 @@ void Character::Update(float elapsedSec)
 		m_AnimTime = 0;
 		this->GetSprite()->IncrementIndex();
 	}
+
 	auto rigPos = m_RigidBody->GetTransform();
 	this->GetTransform()->SetPosition(rigPos.p.x, rigPos.p.y, 0);
 }

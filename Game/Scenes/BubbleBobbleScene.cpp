@@ -70,7 +70,7 @@ void LVB::BubbleBobbleScene::Update(float)
 
 void LVB::BubbleBobbleScene::LateUpdate(float)
 {
-	m_PhysicsWorld->Step(1 / 60, 8, 8);
+	m_PhysicsWorld->Step(1.f / 60.f, 8, 8);
 }
 void LVB::BubbleBobbleScene::Render() const
 {
