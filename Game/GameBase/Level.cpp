@@ -22,13 +22,15 @@ std::vector<glm::ivec2> Level::BlockPositions() const
 	std::vector<glm::ivec2> positions;
 	for (std::size_t y{ 0 }; y < m_Height; ++y)
 	{
-		for (std::size_t x{ 0 }; x < m_Width; ++x)
+		for (std::size_t x{ 0 }; x < m_Width-2; ++x)
 		{
 			if (this->m_Tiles[x + m_Width * y])
 			{
 				positions.push_back({ x,y });
 			}
 		}
+		for (std::size_t x{ m_Width - 2 }; x < m_Width; ++x)
+			positions.push_back({ x,y });
 	}
 	return positions;
 }

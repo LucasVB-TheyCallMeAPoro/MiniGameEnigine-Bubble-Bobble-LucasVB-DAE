@@ -52,6 +52,7 @@ void LVB::GameScene::RootRender() const
 	{
 		object->RootRender();
 	}
+	Render();
 }
 void LVB::GameScene::RootUpdate(float elapsedSec)
 {
