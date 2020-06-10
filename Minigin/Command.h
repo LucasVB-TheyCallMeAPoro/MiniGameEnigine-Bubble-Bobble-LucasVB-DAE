@@ -1,8 +1,12 @@
 #pragma once
-class Command
+namespace LVB
 {
-public:
-	virtual ~Command() = default;
-	virtual void Execute() = 0;
-};
+	class GameObject;
+	class Command
+	{
+	public:
+		virtual ~Command() = default;
+		virtual void Execute(GameObject* actor) = 0;
+	};
+}
 

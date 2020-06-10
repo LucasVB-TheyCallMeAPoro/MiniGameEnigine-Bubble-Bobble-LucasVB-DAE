@@ -9,6 +9,7 @@
 #include "Spritesheet.h"
 #include "Renderer.h"
 #include "PhysicsDebugRenderer.h"
+#include "../GameBase/ContactListener.h"
 LVB::BubbleBobbleScene::BubbleBobbleScene()
 	:GameScene("Gamescene")
 	,m_Level{}
@@ -21,12 +22,14 @@ LVB::BubbleBobbleScene::~BubbleBobbleScene()
 {
 	delete m_PhysicsWorld;
 	delete m_DebugRenderer;
+	delete m_Listener;
 }
 
 void LVB::BubbleBobbleScene::Initialize()
 {
+	m_Listener = new ContactListener{};
 	m_DebugRenderer =  new PhysicsDebugRenderer{};
-	const b2Vec2 gravity{ 0,-9.86 };
+	const b2Vec2 gravity{ 0,50 };
 	m_PhysicsWorld = new b2World{ gravity };
 	//in constructor, usually
 	m_PhysicsWorld->SetDebugDraw(m_DebugRenderer);
@@ -34,7 +37,7 @@ void LVB::BubbleBobbleScene::Initialize()
 	//somewhere appropriate
 	m_DebugRenderer->SetFlags(b2Draw::e_shapeBit);
 	Renderer::GetInstance().SetScale(2.f);
-	Renderer::GetInstance().SetOrigin(-32, -32);
+	Renderer::GetInstance().SetOrigin(-36, -32);
 	
 	BinaryReader file("../data/BBSprites/leveldata.dat");
 	std::vector<Level> levels(100);
@@ -54,13 +57,16 @@ void LVB::BubbleBobbleScene::Initialize()
 		collider.position.Set(positions[i].x * go->GetSprite()->GetSpriteSheet()->GetSpriteWidth(), positions[i].y * go->GetSprite()->GetSpriteSheet()->GetSpriteHeight());
 		b2Body* body = m_PhysicsWorld->CreateBody(&collider);
 		b2PolygonShape box;
-		box.SetAsBox(8, 8);
+		box.SetAsBox(4, 4);
 		body->CreateFixture(&box, 0.0f);
 		AddGameObject(go);
 	}
 
 	Character* player = new Character{ Character::Type::bob,8,1,16 ,m_PhysicsWorld };
 	this->AddGameObject(player);
+	m_Listener->SetCharacter(player);
+
+	m_PhysicsWorld->SetContactListener(m_Listener);
 }
 
 void LVB::BubbleBobbleScene::Update(float)

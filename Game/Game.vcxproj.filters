@@ -56,5 +56,8 @@
     <ClInclude Include="GameBase\Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameBase\ContactListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,12 +19,15 @@
     <Filter Include="Managers">
       <UniqueIdentifier>{b47d2ae5-6eca-4996-af3b-9e8766142bcf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{6c63d394-c8ab-45e9-87db-658029dec318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{03311519-0d7e-4fa5-ac34-e86732b9a77e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniginPCH.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Texture2D.h">
@@ -45,9 +48,6 @@
     <ClInclude Include="TextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -62,9 +62,6 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Audio.h">
       <Filter>Components</Filter>
@@ -85,23 +82,26 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="BinaryReader.h">
-      <Filter>Components</Filter>
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsDebugRenderer.h">
-      <Filter>Components</Filter>
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Minigin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -131,9 +131,6 @@
     <ClCompile Include="Font.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Audio.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -146,14 +143,23 @@
     <ClCompile Include="BaseCollider.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Spritesheet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BinaryReader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsDebugRenderer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Spritesheet.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

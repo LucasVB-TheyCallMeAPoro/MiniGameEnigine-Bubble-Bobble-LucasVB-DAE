@@ -13,10 +13,10 @@ void LVB::CommandAssignmentScene::Initialize()
 	DuckCommand* duck = new DuckCommand();
 	FartCommand* fart = new FartCommand();
 	FireCommand* fire = new FireCommand();
-	InputManager::GetInstance().BindToController(LVB::ControllerButton::ButtonA, jump);
-	InputManager::GetInstance().BindToController(LVB::ControllerButton::ButtonB, duck);
-	InputManager::GetInstance().BindToController(LVB::ControllerButton::ButtonX, fart);
-	InputManager::GetInstance().BindToKeyboard(SDL_SCANCODE_A, fire);
+	InputManager::GetInstance().BindToController<JumpCommand>(LVB::ControllerButton::ButtonA);
+	InputManager::GetInstance().BindToController<DuckCommand>(LVB::ControllerButton::ButtonB);
+	InputManager::GetInstance().BindToController<FartCommand>(LVB::ControllerButton::ButtonX);
+	InputManager::GetInstance().BindToKeyboard<FireCommand>(SDL_SCANCODE_A);
 }
 
 void LVB::CommandAssignmentScene::Update(float)

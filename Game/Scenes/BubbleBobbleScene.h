@@ -5,6 +5,7 @@
 class PhysicsDebugRenderer;
 namespace LVB
 {
+	class ContactListener;
 	class GameObject;
 	class BubbleBobbleScene : public LVB::GameScene
 	{		
@@ -25,6 +26,7 @@ namespace LVB
 		Level m_Level;
 		b2World* m_PhysicsWorld;
 		PhysicsDebugRenderer* m_DebugRenderer;
+		ContactListener* m_Listener;
 	};
 }
 

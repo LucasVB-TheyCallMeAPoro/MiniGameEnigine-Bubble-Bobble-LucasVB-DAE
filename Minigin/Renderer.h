@@ -1,5 +1,6 @@
 #pragma once
 #include "Singleton.h"
+#include "Box2D.h"
 #pragma warning(push)
 #pragma warning (disable:4201)
 #include <glm/vec2.hpp>
@@ -23,14 +24,18 @@ namespace LVB
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
-		void RenderSprite(const Sprite& sprite, const float x, const float y);
+		void RenderSprite(const Sprite& sprite, const float x, const float y) const;
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
 		void SetScale(float scale) { m_Scale = scale; }
 		void SetOrigin(int x, int y) { m_CameraOrigin.x = x; m_CameraOrigin.y = y; }
+
+		void RenderPolygon(const b2Vec2* vertices);
 	private:
 		SDL_Renderer* m_Renderer{};
 		glm::ivec2 m_CameraOrigin{ 0,0 };
 		float m_Scale = 1.f;
+
+		SDL_Rect GetDestRect(float x, float y, float width, float height) const;
 	};
 }
 

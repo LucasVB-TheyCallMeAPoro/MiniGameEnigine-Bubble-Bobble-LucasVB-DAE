@@ -5,6 +5,7 @@
 #include <map>
 #include "Command.h"
 #include <SDL_scancode.h>
+#include <type_traits>
 namespace LVB
 {
 	enum class ControllerButton
@@ -31,10 +32,7 @@ namespace LVB
 			keyHold = 4,
 		};
 		bool ProcessInput();
-		void HandleInput() const;
-
-		void BindToKeyboard(SDL_Scancode, Command*);
-		void BindToController(ControllerButton, Command*);
+		Command* HandleInput() const;
 
 		Command* UnbindKeyboard(SDL_Scancode);
 		Command* UnbindController(ControllerButton);
@@ -43,12 +41,28 @@ namespace LVB
 		void RebindController(ControllerButton oldKey, ControllerButton newKey);
 
 		~InputManager();
+
+		template <typename T, typename... Args, std::enable_if_t<std::is_base_of_v<Command, T>, int> = 0>
+		void BindToKeyboard(SDL_Scancode key, Args&&... args)
+		{
+			Command* c = new T(std::forward<Args>(args)...);
+			BindToKeyboard(key, c);
+		}
+		template <typename T, typename... Args, std::enable_if_t<std::is_base_of_v<Command, T>, int> = 0>
+		void  BindToController(ControllerButton button, Args&&... args)
+		{
+			Command* c = new T(std::forward<Args>(args)...);
+			BindToController(button, c);
+		}
 	private:
 		XINPUT_STATE m_CurrentState{};
 		const UINT8* m_CurrentKeyState;
 		std::map<SDL_Scancode, Command*> m_KeyboardControls;
 		std::map<ControllerButton, Command*> m_ControllerControls;
 		bool m_ControllerCheck = true;
+
+		void BindToKeyboard(SDL_Scancode, Command*);
+		void BindToController(ControllerButton, Command*);
 	};
 
 }

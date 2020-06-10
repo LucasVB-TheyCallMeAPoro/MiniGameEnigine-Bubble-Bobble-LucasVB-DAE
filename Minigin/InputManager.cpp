@@ -28,21 +28,22 @@ bool LVB::InputManager::ProcessInput()
 	return true;
 }
 
-void LVB::InputManager::HandleInput() const
+LVB::Command* LVB::InputManager::HandleInput() const
 {
 	if (m_ControllerCheck)
 	{
 		for (const auto& button : m_ControllerControls)
 		{
 			if (m_CurrentState.Gamepad.wButtons & static_cast<WORD>(button.first))
-				button.second->Execute();
+				return button.second;
 		}
 	}
 	for (const auto& key : m_KeyboardControls)
 	{
 		if (m_CurrentKeyState[key.first])
-			key.second->Execute();
+			return key.second;
 	}
+	return nullptr;
 }
 
 void LVB::InputManager::BindToKeyboard(SDL_Scancode key, Command* c)
@@ -55,7 +56,7 @@ void LVB::InputManager::BindToController(ControllerButton button, Command* c)
 	m_ControllerControls.emplace(button, c);
 }
 
-Command* LVB::InputManager::UnbindKeyboard(SDL_Scancode key)
+LVB::Command* LVB::InputManager::UnbindKeyboard(SDL_Scancode key)
 {
 	Command* c{};
 	auto it = m_KeyboardControls.find(key);
@@ -66,7 +67,7 @@ Command* LVB::InputManager::UnbindKeyboard(SDL_Scancode key)
 	return c;
 }
 
-Command* LVB::InputManager::UnbindController(ControllerButton button)
+LVB::Command* LVB::InputManager::UnbindController(ControllerButton button)
 {
 	Command* c{};
 	auto it = m_ControllerControls.find(button);
