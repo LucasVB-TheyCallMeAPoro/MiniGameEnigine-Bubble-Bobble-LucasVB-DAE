@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MiniginPCH.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Texture2D.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -37,9 +34,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Minigin.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="BaseComponent.h">
@@ -95,6 +89,12 @@
     </ClInclude>
     <ClInclude Include="PhysicsDebugRenderer.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Minigin.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniginPCH.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

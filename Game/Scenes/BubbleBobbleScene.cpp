@@ -41,17 +41,18 @@ void LVB::BubbleBobbleScene::Initialize()
 	
 	BinaryReader file("../data/BBSprites/leveldata.dat");
 	std::vector<Level> levels(100);
+	int level{ 2};
 	for (std::size_t i{ 0 }; i < 100; ++i)
 	{
 		file >> levels[i];
 	}
-	auto positions = levels[2].BlockPositions();
+	auto positions = levels[level].BlockPositions();
 	
 	for (int i{ 0 }; i < positions.size(); ++i)
 	{
 		GameObject* go = new GameObject{};
 		go->SetTexture("BBsprites/blocks.png");
-		go->SetSprite({ 0,0 }, 8, 8, 10, 10);
+		go->SetSprite({ 0 + (8 * level),0 }, 8, 8, 10, 10);
 		go->GetTransform()->SetPosition(positions[i].x * go->GetSprite()->GetSpriteSheet()->GetSpriteWidth() , positions[i].y * go->GetSprite()->GetSpriteSheet()->GetSpriteHeight(), 0);
 		b2BodyDef collider;
 		collider.position.Set(positions[i].x * go->GetSprite()->GetSpriteSheet()->GetSpriteWidth(), positions[i].y * go->GetSprite()->GetSpriteSheet()->GetSpriteHeight());
@@ -62,7 +63,7 @@ void LVB::BubbleBobbleScene::Initialize()
 		AddGameObject(go);
 	}
 
-	Character* player = new Character{ Character::Type::bob,8,1,16 ,m_PhysicsWorld };
+	Character* player = new Character{ Character::Type::Maita,8,2,16 ,m_PhysicsWorld,{32,170},this };
 	this->AddGameObject(player);
 	m_Listener->SetCharacter(player);
 

@@ -151,6 +151,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameBase\Bubble.cpp" />
     <ClCompile Include="GameBase\Character.cpp" />
     <ClCompile Include="GameBase\Level.cpp" />
     <ClCompile Include="Scenes\BubbleBobbleScene.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="MainGame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameBase\Bubble.h" />
     <ClInclude Include="GameBase\Character.h" />
     <ClInclude Include="GameBase\ContactListener.h" />
     <ClInclude Include="GameBase\Level.h" />

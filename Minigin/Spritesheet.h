@@ -38,7 +38,7 @@ namespace LVB
 		Sprite(const SpriteSheet* sheet);
 		void SetIndex(int i);
 		void IncrementIndex();
-
+		int GetIndex() const { return m_Index; }
 		const SpriteSheet* GetSpriteSheet() const { return m_SourceTexture; }
 		SDL_Rect GetSourceRect() const;
 		
