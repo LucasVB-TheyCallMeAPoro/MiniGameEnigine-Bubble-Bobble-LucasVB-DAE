@@ -63,7 +63,7 @@ void LVB::BubbleBobbleScene::Initialize()
 		AddGameObject(go);
 	}
 
-	Character* player = new Character{ Character::Type::Maita,8,2,16 ,m_PhysicsWorld,{32,170},this };
+	Character* player = new Character{ Character::Type::bob,8,2,16 ,m_PhysicsWorld,{32,170},this };
 	this->AddGameObject(player);
 	m_Listener->SetCharacter(player);
 
