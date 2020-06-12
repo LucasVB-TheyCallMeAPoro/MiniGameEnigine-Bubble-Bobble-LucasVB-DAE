@@ -25,6 +25,9 @@
     <Filter Include="Rendering">
       <UniqueIdentifier>{03311519-0d7e-4fa5-ac34-e86732b9a77e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Patterns">
+      <UniqueIdentifier>{f34b4cb8-abfd-4126-a5f7-1cd5da1c7553}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Texture2D.h">
@@ -54,9 +57,6 @@
     <ClInclude Include="InputManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Audio.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -78,9 +78,6 @@
     <ClInclude Include="BinaryReader.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -95,6 +92,18 @@
     </ClInclude>
     <ClInclude Include="MiniginPCH.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Notifier.h">
+      <Filter>Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Listener.h">
+      <Filter>Patterns</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +155,6 @@
     <ClCompile Include="BinaryReader.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Patterns</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

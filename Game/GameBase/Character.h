@@ -1,9 +1,15 @@
 #pragma once
 #include <GameObject.h>
+#include <Notifier.h>
 using namespace LVB;
+
 class b2World;
 class b2Body;
+namespace LVB
+{
 class GameScene;
+}
+
 class Character : public LVB::GameObject
 {
 public:
@@ -26,9 +32,12 @@ public:
 	void Jump();
 	void MoveLeft();
 	void MoveRight();
-	void TakeDamage() { m_Health -= 1; }
-
+	void TakeDamage();
+	void AddScore(int amount);
 	int m_FootContactCount = 0;
+
+	LVB::Notifier<int> m_OnChangeScore;
+	LVB::Notifier<int> m_OnChangeHealth;
 protected:
 	virtual void Render() const override;
 	virtual void Update(float elapsedSec) override;
@@ -40,8 +49,10 @@ private:
 	State m_State;
 	LVB::GameScene* m_Scene;
 	int m_Health = 4;
+	int m_Score = 0;
 	int m_ColumnCount;
 	void InitControls();
+
 };
 
 

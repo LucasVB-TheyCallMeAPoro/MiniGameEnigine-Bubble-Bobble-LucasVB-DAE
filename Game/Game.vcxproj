@@ -154,6 +154,7 @@
     <ClCompile Include="GameBase\Bubble.cpp" />
     <ClCompile Include="GameBase\Character.cpp" />
     <ClCompile Include="GameBase\Level.cpp" />
+    <ClCompile Include="GameBase\UI.cpp" />
     <ClCompile Include="Scenes\BubbleBobbleScene.cpp" />
     <ClCompile Include="Commands\GameCommands.cpp" />
     <ClCompile Include="Scenes\CommandAssignmentScene.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="GameBase\Character.h" />
     <ClInclude Include="GameBase\ContactListener.h" />
     <ClInclude Include="GameBase\Level.h" />
+    <ClInclude Include="GameBase\UI.h" />
     <ClInclude Include="Scenes\BubbleBobbleScene.h" />
     <ClInclude Include="Commands\GameCommands.h" />
     <ClInclude Include="Scenes\CommandAssignmentScene.h" />

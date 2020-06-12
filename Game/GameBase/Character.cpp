@@ -18,7 +18,12 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	,m_State{ Character::State::moveRight }
 	,m_PhysicsWorld{world}
 	,m_Scene{scene}
+	,m_OnChangeScore{}
+	,m_OnChangeHealth{}
+	,m_Health{4}
+	,m_Score{0}
 {
+
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(spawnPos.x, spawnPos.y);
@@ -48,6 +53,9 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	SetSprite(glm::ivec2(0, 0 + static_cast<unsigned int>(m_Type) * spriteHeight * 2), GetTexture()->GetWidth() / columnCount, spriteHeight, columnCount, rowCount);
 
 	InitControls();
+
+	m_OnChangeHealth.Notify(m_Health);
+	m_OnChangeScore.Notify(m_Score);
 }
 
 void Character::Shoot()
@@ -82,13 +90,33 @@ void Character::Jump()
 void Character::MoveLeft()
 {
 	m_RigidBody->SetLinearVelocity({ -40,m_RigidBody->GetLinearVelocity().y });
-	m_State = Character::State::moveLeft;
+	if (m_State != Character::State::moveLeft)
+	{
+		m_State = Character::State::moveLeft;
+	}
 }
 
 void Character::MoveRight()
 {
 	m_RigidBody->SetLinearVelocity({ 40,m_RigidBody->GetLinearVelocity().y });
-	m_State = Character::State::moveRight;
+
+	if (m_State != Character::State::moveRight)
+	{
+		m_State = Character::State::moveRight;
+	}
+	
+}
+
+void Character::TakeDamage()
+{
+	m_Health -= 1;
+	m_OnChangeHealth.Notify(m_Health);
+}
+
+void Character::AddScore(int amount)
+{
+	m_Score += amount;
+	m_OnChangeScore.Notify(m_Score);
 }
 
 void Character::Render() const
@@ -107,6 +135,7 @@ void Character::Update(float elapsedSec)
 	{
 		m_RigidBody->SetLinearVelocity({ 0,m_RigidBody->GetLinearVelocity().y });
 	}
+
 	m_AnimTime += elapsedSec;
 	if (m_AnimTime >= (1.f / this->GetSprite()->GetSpriteSheet()->GetColumnCount()))
 	{
