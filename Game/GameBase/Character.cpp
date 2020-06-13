@@ -11,7 +11,8 @@
 #include "../Commands/GameCommands.h"
 #include "Bubble.h"
 #include "GameScene.h"
-Character::Character(Character::Type type, int columnCount, int rowCount, int totalRowCount, b2World* world, const glm::vec2& spawnPos, LVB::GameScene* scene)
+#include "../Scenes/BubbleBobbleScene.h"
+Character::Character(Character::Type type, int columnCount, int rowCount, int totalRowCount, b2World* world, const glm::vec2& spawnPos, LVB::GameScene* scene, unsigned short categoryMask, unsigned short maskBits)
 	:m_Type{type}
 	,m_AnimTime{0.f}
 	,m_ColumnCount{columnCount}
@@ -22,6 +23,10 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	,m_OnChangeHealth{}
 	,m_Health{4}
 	,m_Score{0}
+	,m_Shot{false}
+	,m_JumpForce{-70}
+	,m_MoveSpeed{60}
+	,m_SpawnPosition{spawnPos}
 {
 
 	b2BodyDef bodyDef;
@@ -31,51 +36,56 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	m_RigidBody = world->CreateBody(&bodyDef);
 	m_RigidBody->SetFixedRotation(true);
 	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(8,8);
+	dynamicBox.SetAsBox(7,8);
 	
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 1.f;
 	fixtureDef.friction = 0.3f;
+	fixtureDef.filter.categoryBits = categoryMask;
+	fixtureDef.filter.groupIndex = maskBits;
 	fixtureDef.userData = (void*)2;
 	m_RigidBody->CreateFixture(&fixtureDef);
 
 	m_RigidBody->SetSleepingAllowed(false);
 	m_RigidBody->SetAwake(true);
 
-	dynamicBox.SetAsBox(8, 2, b2Vec2(0, 8), 0);
+	dynamicBox.SetAsBox(4, 2, b2Vec2(0, 8), 0);
 	fixtureDef.isSensor = true;
 	b2Fixture* footSensorFixture = m_RigidBody->CreateFixture(&fixtureDef);
 	footSensorFixture->SetUserData((void*)3);
 	
+	m_RigidBody->SetUserData(this);
 	SetTexture("BBSprites/Sprites0.png");
 	int spriteHeight = GetTexture()->GetHeight() / totalRowCount;
 	SetSprite(glm::ivec2(0, 0 + static_cast<unsigned int>(m_Type) * spriteHeight * 2), GetTexture()->GetWidth() / columnCount, spriteHeight, columnCount, rowCount);
 
 	InitControls();
 
-	m_OnChangeHealth.Notify(m_Health);
-	m_OnChangeScore.Notify(m_Score);
 }
 
 void Character::Shoot()
 {
+	if (m_Shot)
+		return; 
+
+	glm::vec2 spawnOffset{ 30,8 };
 	switch (m_State)
 	{
 	case Character::moveLeft:
 	{
-		Bubble* bubble = new Bubble{ m_PhysicsWorld, {this->GetTransform()->GetPosition().x - 30, this->GetTransform()->GetPosition().y + 8} };
+		Bubble* bubble = new Bubble{ m_PhysicsWorld, {this->GetTransform()->GetPosition().x - spawnOffset.x, this->GetTransform()->GetPosition().y + spawnOffset.y},m_Scene };
 		m_Scene->AddGameObject(bubble);
 	}
 	break;
 	case Character::moveRight:
 	{
-		Bubble* bubble = new Bubble{ m_PhysicsWorld, {this->GetTransform()->GetPosition().x + 30, this->GetTransform()->GetPosition().y + 8} };
+		Bubble* bubble = new Bubble{ m_PhysicsWorld, {this->GetTransform()->GetPosition().x + spawnOffset.x, this->GetTransform()->GetPosition().y + spawnOffset.y}, m_Scene };
 		m_Scene->AddGameObject(bubble);
 	}
 	break;
 	}
-	
+	m_Shot = true;
 
 }
 
@@ -83,13 +93,18 @@ void Character::Jump()
 {
 	if (m_FootContactCount >= 1)
 	{
-		m_RigidBody->SetLinearVelocity({ m_RigidBody->GetLinearVelocity().x,-70 });
+		m_RigidBody->SetLinearVelocity({ m_RigidBody->GetLinearVelocity().x,m_JumpForce });
+		b2Filter filter = m_RigidBody->GetFixtureList()->GetFilterData();
+
+		filter.maskBits &= ~LVB::BubbleBobbleScene::entityType::PLATFORM;
+
+		m_RigidBody->GetFixtureList()->SetFilterData(filter);
 	}
 }
 
 void Character::MoveLeft()
 {
-	m_RigidBody->SetLinearVelocity({ -40,m_RigidBody->GetLinearVelocity().y });
+	m_RigidBody->SetLinearVelocity({ -m_MoveSpeed,m_RigidBody->GetLinearVelocity().y });
 	if (m_State != Character::State::moveLeft)
 	{
 		m_State = Character::State::moveLeft;
@@ -98,7 +113,7 @@ void Character::MoveLeft()
 
 void Character::MoveRight()
 {
-	m_RigidBody->SetLinearVelocity({ 40,m_RigidBody->GetLinearVelocity().y });
+	m_RigidBody->SetLinearVelocity({ m_MoveSpeed,m_RigidBody->GetLinearVelocity().y });
 
 	if (m_State != Character::State::moveRight)
 	{
@@ -117,6 +132,18 @@ void Character::AddScore(int amount)
 {
 	m_Score += amount;
 	m_OnChangeScore.Notify(m_Score);
+}
+
+void Character::NotifyUI()
+{
+	m_OnChangeHealth.Notify(m_Health);
+	m_OnChangeScore.Notify(m_Score);
+}
+
+void Character::SetToSpawnPos()
+{
+	this->GetTransform()->SetPosition(m_SpawnPosition.x, m_SpawnPosition.y, 0);
+	m_RigidBody->SetTransform({ m_SpawnPosition.x,m_SpawnPosition.y }, 0);
 }
 
 void Character::Render() const
@@ -155,6 +182,22 @@ void Character::Update(float elapsedSec)
 	}
 	auto rigPos = m_RigidBody->GetTransform();
 	this->GetTransform()->SetPosition(rigPos.p.x, rigPos.p.y, 0);
+
+	if (m_Shot)
+	{
+		m_BubbleCooldownTimer += elapsedSec;
+		if (m_BubbleCooldownTimer >= m_BubbleCooldown)
+		{
+			m_Shot = false;
+			m_BubbleCooldownTimer = 0.f;
+		}
+	}
+
+	//214 is world bottom
+	if (this->GetTransform()->GetPosition().y > 214)
+	{
+		SpawnAtTop();
+	}
 }
 
 void Character::InitControls()
@@ -167,4 +210,10 @@ void Character::InitControls()
 	InputManager::GetInstance().BindToKeyboard<MoveLeftCommand>(SDL_SCANCODE_LEFT);
 	InputManager::GetInstance().BindToKeyboard<MoveRightCommand>(SDL_SCANCODE_RIGHT);
 	InputManager::GetInstance().BindToKeyboard<FireCommand>(SDL_SCANCODE_A);
+}
+
+void Character::SpawnAtTop()
+{
+	this->GetTransform()->SetPosition(this->GetTransform()->GetPosition().x, 0, 0);
+	m_RigidBody->SetTransform({ this->GetTransform()->GetPosition().x ,this->GetTransform()->GetPosition().y }, 0);
 }

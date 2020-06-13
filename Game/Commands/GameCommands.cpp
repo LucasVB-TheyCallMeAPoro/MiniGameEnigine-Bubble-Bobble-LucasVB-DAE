@@ -9,18 +9,10 @@ void FireCommand::Execute(GameObject* actor)
 	character->Shoot();
 }
 
-void DuckCommand::Execute(GameObject*)
-{
-}
-
 void JumpCommand::Execute(GameObject* actor)
 {
 	Character* character = reinterpret_cast<Character*>(actor);
 	character->Jump();
-}
-
-void FartCommand::Execute(GameObject* )
-{
 }
 
 void MoveLeftCommand::Execute(GameObject* actor)

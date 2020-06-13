@@ -10,12 +10,9 @@ LVB::CommandAssignmentScene::CommandAssignmentScene()
 void LVB::CommandAssignmentScene::Initialize()
 {
 	JumpCommand* jump = new JumpCommand();
-	DuckCommand* duck = new DuckCommand();
-	FartCommand* fart = new FartCommand();
+
 	FireCommand* fire = new FireCommand();
 	InputManager::GetInstance().BindToController<JumpCommand>(LVB::ControllerButton::ButtonA);
-	InputManager::GetInstance().BindToController<DuckCommand>(LVB::ControllerButton::ButtonB);
-	InputManager::GetInstance().BindToController<FartCommand>(LVB::ControllerButton::ButtonX);
 	InputManager::GetInstance().BindToKeyboard<FireCommand>(SDL_SCANCODE_A);
 }
 

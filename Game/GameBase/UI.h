@@ -19,20 +19,26 @@ private:
 };
 
 class Character;
+namespace LVB {
+	class GameScene;
+	class GameObject;
+}
 class UI
 {
 public:
 	enum ScreenPos
 	{
-		left,
-		right
+		player1,
+		player2
 	};
-	UI(Character* character,ScreenPos pos);
+	UI(Character* character,ScreenPos pos, LVB::GameScene* scene);
 	void Render() const;
+	void Update();
 private:
 	ScoreListener m_ScoreListener;
 	HealthListener m_HealthListener;
-
+	LVB::GameObject* m_ScoreObject;
+	LVB::GameObject* m_HealthObject;
 	Character* m_Character;
 	ScreenPos m_Pos;
 };

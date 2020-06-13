@@ -25,7 +25,7 @@ namespace LVB
 		Sprite* GetSprite() const { return m_Sprite; }
 		Transform* GetTransform() const { return m_pTransform; };
 		GameObject();
-		~GameObject();
+		virtual ~GameObject();
 
 		void AddComponent(BaseComponent* pComp);
 		void RemoveComponent(BaseComponent* pComp);
