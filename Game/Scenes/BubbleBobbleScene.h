@@ -23,7 +23,13 @@ namespace LVB
 			ENEMY = 0x0008,
 			BUBBLE = 0x0010,
 		};
-		BubbleBobbleScene();
+		enum GameType
+		{
+			solo,
+			coop,
+			vs
+		};
+		BubbleBobbleScene(GameType type);
 		~BubbleBobbleScene() override;
 		BubbleBobbleScene(const BubbleBobbleScene& other) = delete;
 		BubbleBobbleScene(BubbleBobbleScene&& other) noexcept = delete;
@@ -39,6 +45,7 @@ namespace LVB
 		void LateUpdate(float elapsedSec) override;
 		void Render() const override;
 	private:
+		GameType m_Type;
 		b2World* m_PhysicsWorld;
 		PhysicsDebugRenderer* m_DebugRenderer;
 		ContactListener* m_Listener;
@@ -62,7 +69,7 @@ namespace LVB
 
 		void SpawnEnemies();
 
-		
+		void InitControls();
 		//Level
 		std::vector<GameObject*> m_LevelObjects;
 		std::vector<b2Body*> m_LevelBodies;

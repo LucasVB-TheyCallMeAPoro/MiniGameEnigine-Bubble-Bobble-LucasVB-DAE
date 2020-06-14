@@ -13,6 +13,7 @@ bool LVB::InputManager::ProcessInput()
 	m_CurrentKeyState = SDL_GetKeyboardState(nullptr);
 	
 	SDL_Event e;
+	m_HasClicked = false;
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
 			return false;
@@ -20,9 +21,12 @@ bool LVB::InputManager::ProcessInput()
 		if (e.type == SDL_KEYDOWN) {
 			
 		}
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
-			
+		if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
+			m_HasClicked = true;
+			m_MouseX = e.button.x;
+			m_MouseY = e.button.y;
 		}
+
 	}
 
 	return true;
@@ -30,6 +34,7 @@ bool LVB::InputManager::ProcessInput()
 
 LVB::Command* LVB::InputManager::HandleInput() const
 {
+
 	if (m_ControllerCheck)
 	{
 		for (const auto& button : m_ControllerControls)

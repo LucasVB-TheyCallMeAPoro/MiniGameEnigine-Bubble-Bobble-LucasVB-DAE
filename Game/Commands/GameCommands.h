@@ -4,23 +4,27 @@ using namespace LVB;
 class FireCommand : public Command
 {
 public:
-	virtual void Execute(GameObject* actor) override;
+	FireCommand(GameObject* go);
+	virtual void Execute() override;
 };
 
 class JumpCommand : public Command
 {
 public:
-	virtual void Execute(GameObject* actor) override;
+	JumpCommand(GameObject* go);
+	virtual void Execute() override;
 };
 
 class MoveLeftCommand : public Command
 {
 public:
-	virtual void Execute(GameObject* actor) override;
+	MoveLeftCommand(GameObject* go);
+	virtual void Execute() override;
 };
 
 class MoveRightCommand : public Command
 {
 public:
-	virtual void Execute(GameObject* actor) override;
+	MoveRightCommand(GameObject* go);
+	virtual void Execute() override;
 };

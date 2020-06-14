@@ -7,11 +7,12 @@
 #include "Scenes/BubbleBobbleScene.h"
 #include "Scenes/VictorySCENE.h"
 #include "Scenes/LoseScene.h"
+#include "Scenes/MainMenuScene.h"
 int main(int, char* []) {
 
 	LVB::Minigin engine;
 	engine.Initialize();
-	LVB::SceneManager::GetInstance().CreateScene(new LVB::BubbleBobbleScene{});
+	LVB::SceneManager::GetInstance().CreateScene(new MainMenu{});
 	LVB::SceneManager::GetInstance().CreateScene(new VictorySCENE{});
 	LVB::SceneManager::GetInstance().CreateScene(new LoseScene{});
 	

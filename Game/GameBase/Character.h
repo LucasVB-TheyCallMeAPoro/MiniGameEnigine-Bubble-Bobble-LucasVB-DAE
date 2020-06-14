@@ -66,7 +66,7 @@ private:
 	int m_Health = 4;
 	int m_Score = 0;
 	int m_ColumnCount;
-	void InitControls();
+
 
 	glm::vec2 m_SpawnPosition;
 	std::string* m_SensorName;

@@ -5,8 +5,15 @@ namespace LVB
 	class Command
 	{
 	public:
+		Command(GameObject* actor)
+			:m_GameObject{actor}
+		{}
 		virtual ~Command() = default;
-		virtual void Execute(GameObject* actor) = 0;
+		virtual void Execute() = 0;
+
+		GameObject* GetGameObject()const { return m_GameObject; }
+	private:
+		GameObject* m_GameObject;
 	};
 }
 

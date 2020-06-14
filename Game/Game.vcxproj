@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameBase\Bubble.cpp" />
+    <ClCompile Include="GameBase\Button.cpp" />
     <ClCompile Include="GameBase\Character.cpp" />
     <ClCompile Include="GameBase\Enemies.cpp" />
     <ClCompile Include="GameBase\Level.cpp" />
@@ -162,10 +163,12 @@
     <ClCompile Include="Scenes\DemoScene.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Scenes\LoseScene.cpp" />
+    <ClCompile Include="Scenes\MainMenuScene.cpp" />
     <ClCompile Include="Scenes\VictorySCENE.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase\Bubble.h" />
+    <ClInclude Include="GameBase\Button.h" />
     <ClInclude Include="GameBase\Character.h" />
     <ClInclude Include="GameBase\ContactListener.h" />
     <ClInclude Include="GameBase\Level.h" />
@@ -176,6 +179,7 @@
     <ClInclude Include="Scenes\CommandAssignmentScene.h" />
     <ClInclude Include="Scenes\DemoScene.h" />
     <ClInclude Include="Scenes\LoseScene.h" />
+    <ClInclude Include="Scenes\MainMenuScene.h" />
     <ClInclude Include="Scenes\VictorySCENE.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -66,8 +66,6 @@ Character::Character(Player p,Character::Type type, int columnCount, int rowCoun
 	int spriteHeight = GetTexture()->GetHeight() / totalRowCount;
 	SetSprite(glm::ivec2(0, 0 + static_cast<unsigned int>(m_Type) * spriteHeight * 2), GetTexture()->GetWidth() / columnCount, spriteHeight, columnCount, rowCount);
 
-	InitControls();
-
 }
 
 Character::~Character()
@@ -203,9 +201,9 @@ void Character::Update(float elapsedSec)
 		}
 	}
 	Command* command = InputManager::GetInstance().HandleInput();
-	if (command != nullptr)
+	if (command != nullptr && command->GetGameObject() == this)
 	{
-		command->Execute(this);
+		command->Execute();
 	}
 	else
 	{
@@ -247,18 +245,6 @@ void Character::Update(float elapsedSec)
 	{
 		SpawnAtTop();
 	}
-}
-
-void Character::InitControls()
-{
-	InputManager::GetInstance().BindToController<JumpCommand>(LVB::ControllerButton::ButtonA);
-	InputManager::GetInstance().BindToController<MoveLeftCommand>(LVB::ControllerButton::DPad_Left);
-	InputManager::GetInstance().BindToController<MoveRightCommand>(LVB::ControllerButton::DPad_Right);
-	InputManager::GetInstance().BindToController<FireCommand>(LVB::ControllerButton::ButtonB);
-	InputManager::GetInstance().BindToKeyboard<JumpCommand>(SDL_SCANCODE_SPACE);
-	InputManager::GetInstance().BindToKeyboard<MoveLeftCommand>(SDL_SCANCODE_LEFT);
-	InputManager::GetInstance().BindToKeyboard<MoveRightCommand>(SDL_SCANCODE_RIGHT);
-	InputManager::GetInstance().BindToKeyboard<FireCommand>(SDL_SCANCODE_A);
 }
 
 void Character::SpawnAtTop()

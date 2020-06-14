@@ -54,6 +54,12 @@ namespace LVB
 			Command* c = new T(std::forward<Args>(args)...);
 			BindToController(button, c);
 		}
+		bool GetClick(int* x, int* y) const
+		{
+			*x = m_MouseX;
+			*y = m_MouseY;
+			return m_HasClicked;
+		}
 	private:
 		XINPUT_STATE m_CurrentState{};
 		const UINT8* m_CurrentKeyState;
@@ -61,6 +67,9 @@ namespace LVB
 		std::map<ControllerButton, Command*> m_ControllerControls;
 		bool m_ControllerCheck = true;
 
+		int m_MouseX;
+		int m_MouseY;
+		bool m_HasClicked= false;
 		void BindToKeyboard(SDL_Scancode, Command*);
 		void BindToController(ControllerButton, Command*);
 	};

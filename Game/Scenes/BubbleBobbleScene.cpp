@@ -14,11 +14,12 @@
 #include "SceneManager.h"
 #include <random>
 #include "TextComponent.h"
-
+#include "InputManager.h"
+#include "../Commands/GameCommands.h"
 const int LVB::BubbleBobbleScene::keyPlatform{};
 const int LVB::BubbleBobbleScene::keyWall{};
-LVB::BubbleBobbleScene::BubbleBobbleScene()
-	:GameScene("Gamescene")
+LVB::BubbleBobbleScene::BubbleBobbleScene(GameType type)
+	:GameScene("BubbleBobbleScene")
 	, m_PhysicsWorld{nullptr}
 	,m_Player1UI{}
 	,m_Player2UI{}
@@ -29,6 +30,7 @@ LVB::BubbleBobbleScene::BubbleBobbleScene()
 	,m_Player1{}
 	, m_LevelText{}
 	, m_NumberOfEnemies{}
+	,m_Type{type}
 {
 	Initialize();
 }
@@ -70,6 +72,7 @@ void LVB::BubbleBobbleScene::Initialize()
 
 void LVB::BubbleBobbleScene::Update(float elapsedSec)
 {
+
 	m_Player1UI->Update();
 	m_Player2UI->Update();
 
@@ -212,4 +215,16 @@ void LVB::BubbleBobbleScene::SpawnEnemies()
 		m_Listener->AddEnemy(enemy);
 		spawnPos.x += spawnOffset;
 	}
+}
+
+void LVB::BubbleBobbleScene::InitControls()
+{
+	InputManager::GetInstance().BindToController<JumpCommand>(LVB::ControllerButton::ButtonA,m_Player1);
+	InputManager::GetInstance().BindToController<MoveLeftCommand>(LVB::ControllerButton::DPad_Left, m_Player1);
+	InputManager::GetInstance().BindToController<MoveRightCommand>(LVB::ControllerButton::DPad_Right, m_Player1);
+	InputManager::GetInstance().BindToController<FireCommand>(LVB::ControllerButton::ButtonB, m_Player1);
+	InputManager::GetInstance().BindToKeyboard<JumpCommand>(SDL_SCANCODE_SPACE);
+	InputManager::GetInstance().BindToKeyboard<MoveLeftCommand>(SDL_SCANCODE_LEFT);
+	InputManager::GetInstance().BindToKeyboard<MoveRightCommand>(SDL_SCANCODE_RIGHT);
+	InputManager::GetInstance().BindToKeyboard<FireCommand>(SDL_SCANCODE_A);
 }
