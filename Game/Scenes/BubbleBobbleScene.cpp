@@ -22,6 +22,7 @@ LVB::BubbleBobbleScene::BubbleBobbleScene()
 	,m_LevelNumber{1}
 	, m_Levels{}
 	,m_Player1{}
+	, m_PlatformBodies{}
 {
 	Initialize();
 }
@@ -77,38 +78,15 @@ void LVB::BubbleBobbleScene::InitLevel()
 	m_Levels.resize(100);
 	m_LevelBodies.reserve(100);
 	m_LevelObjects.reserve(100);
+	
 	for (std::size_t i{ 0 }; i < 100; ++i)
 	{
 		file >> m_Levels[i];
 	}
 	auto positions = m_Levels[m_LevelNumber].BlockPositions();
 
-	for (int i{ 0 }; i < positions.size(); ++i)
-	{
-		m_LevelObjects.push_back(new GameObject{});
-		m_LevelObjects.back()->SetTexture("BBsprites/blocks.png");
-		m_LevelObjects.back()->SetSprite({ 0 + (8 * m_LevelNumber ),0 }, 8, 8, 10, 10);
-		m_LevelObjects.back()->GetTransform()->SetPosition(positions[i].x * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteWidth(), positions[i].y * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteHeight(), 0);
-		b2BodyDef collider;
-		collider.position.Set(positions[i].x * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteWidth(), positions[i].y * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteHeight());
-		m_LevelBodies.push_back(m_PhysicsWorld->CreateBody(&collider));
-		b2PolygonShape box;
-		box.SetAsBox(4, 4);
-		b2FixtureDef fixtureDef;
-		fixtureDef.shape = &box;
-		fixtureDef.filter.categoryBits = BOUNDARY;
-		fixtureDef.filter.groupIndex = CHARACTER | ENEMY;
-		
-		if (positions[i].x > 1 && positions[i].y > 0 && positions[i].x < 30)
-			fixtureDef.filter.categoryBits = PLATFORM;
+	LoadLevel(positions);
 
-		m_LevelBodies.back()->CreateFixture(&fixtureDef);
-		
-		
-			
-
-		AddGameObject(m_LevelObjects.back());
-	}
 }
 
 void LVB::BubbleBobbleScene::InitPlayer()
@@ -135,6 +113,13 @@ void LVB::BubbleBobbleScene::LoadNewLevel()
 	m_LevelBodies.reserve(100);
 	m_LevelObjects.reserve(100);
 	
+	LoadLevel(positions);
+
+	m_Player1->SetToSpawnPos();
+}
+
+void LVB::BubbleBobbleScene::LoadLevel(const std::vector<glm::ivec2>& positions)
+{
 	for (int i{ 0 }; i < positions.size(); ++i)
 	{
 		m_LevelObjects.push_back(new GameObject{});
@@ -151,12 +136,18 @@ void LVB::BubbleBobbleScene::LoadNewLevel()
 		fixtureDef.filter.categoryBits = BOUNDARY;
 		fixtureDef.filter.groupIndex = CHARACTER | ENEMY;
 
-		if (positions[i].x > 1 && positions[i].y > 0 && positions[i].x < 30)
-			fixtureDef.filter.categoryBits = PLATFORM;
+		if (positions[i].x > 1 && positions[i].y > 0 && positions[i].x < 30 && positions[i].y < 24)
+		{
 
-		m_LevelBodies.back()->CreateFixture(&fixtureDef);
+			fixtureDef.filter.categoryBits = PLATFORM;
+			m_LevelBodies.back()->CreateFixture(&fixtureDef);
+			m_PlatformBodies.push_back(m_LevelBodies.back());
+		}
+		else
+		{
+			m_LevelBodies.back()->CreateFixture(&fixtureDef);
+		}
+
 		AddGameObject(m_LevelObjects.back());
 	}
-
-	m_Player1->SetToSpawnPos();
 }

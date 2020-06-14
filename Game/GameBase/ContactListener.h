@@ -21,13 +21,13 @@ namespace LVB
         void EndContact(b2Contact* contact) {
             //check if fixture A was the foot sensor
             void* fixtureUserData = contact->GetFixtureA()->GetUserData();
-            if ((int)fixtureUserData == 3)
+            if ((char*)fixtureUserData == "FootSensor")
             {
                 m_Parent->m_FootContactCount--;
             }
             //check if fixture B was the foot sensor
             fixtureUserData = contact->GetFixtureB()->GetUserData();
-            if ((int)fixtureUserData == 3)
+            if ((char*)fixtureUserData == "FootSensor" )
             {
                 m_Parent->m_FootContactCount--;
             }
@@ -42,13 +42,13 @@ namespace LVB
             //Check if grounded code
            //check if fixture A was the foot sensor
             void* fixtureUserData = contact->GetFixtureA()->GetUserData();
-            if ((int)fixtureUserData == 3)
+            if ((char*)fixtureUserData == "FootSensor")
             {
                 m_Parent->m_FootContactCount++;
             }
             //check if fixture B was the foot sensor
             fixtureUserData = contact->GetFixtureB()->GetUserData();
-            if ((int)fixtureUserData == 3)
+            if ((char*)fixtureUserData == "FootSensor")
             {
                 m_Parent->m_FootContactCount++;
             }

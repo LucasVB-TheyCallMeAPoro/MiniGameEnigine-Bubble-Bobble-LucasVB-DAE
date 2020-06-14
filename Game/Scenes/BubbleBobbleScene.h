@@ -45,11 +45,12 @@ namespace LVB
 		void InitPlayer();
 
 		void LoadNewLevel();
-
+		void LoadLevel(const std::vector<glm::ivec2>& positions);
 
 		//Level
 		std::vector<GameObject*> m_LevelObjects;
 		std::vector<b2Body*> m_LevelBodies;
+		std::vector<b2Body*> m_PlatformBodies;
 	};
 }
 

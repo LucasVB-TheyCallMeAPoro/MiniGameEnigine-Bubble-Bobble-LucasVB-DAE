@@ -27,6 +27,9 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	,m_JumpForce{-70}
 	,m_MoveSpeed{60}
 	,m_SpawnPosition{spawnPos}
+	, m_Jumped{ false }
+	,m_TotalJumpTime{1.f}
+	,m_JumpTime{0}
 {
 
 	b2BodyDef bodyDef;
@@ -50,10 +53,11 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	m_RigidBody->SetSleepingAllowed(false);
 	m_RigidBody->SetAwake(true);
 
+	//foot sensor
 	dynamicBox.SetAsBox(4, 2, b2Vec2(0, 8), 0);
 	fixtureDef.isSensor = true;
 	b2Fixture* footSensorFixture = m_RigidBody->CreateFixture(&fixtureDef);
-	footSensorFixture->SetUserData((void*)3);
+	footSensorFixture->SetUserData((void*)"FootSensor");
 	
 	m_RigidBody->SetUserData(this);
 	SetTexture("BBSprites/Sprites0.png");
@@ -91,14 +95,16 @@ void Character::Shoot()
 
 void Character::Jump()
 {
-	if (m_FootContactCount >= 1)
+	if (m_FootContactCount >= 1 && !m_Jumped)
 	{
 		m_RigidBody->SetLinearVelocity({ m_RigidBody->GetLinearVelocity().x,m_JumpForce });
-		b2Filter filter = m_RigidBody->GetFixtureList()->GetFilterData();
+		b2Filter filter = m_RigidBody->GetFixtureList()->GetNext()->GetFilterData();
 
-		filter.maskBits &= ~LVB::BubbleBobbleScene::entityType::PLATFORM;
-
-		m_RigidBody->GetFixtureList()->SetFilterData(filter);
+		//filter.maskBits &= ~LVB::BubbleBobbleScene::entityType::PLATFORM;
+		filter.maskBits = BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::ENEMY;
+		
+		m_RigidBody->GetFixtureList()->GetNext()->SetFilterData(filter);
+		m_Jumped = true;
 	}
 }
 
@@ -153,6 +159,20 @@ void Character::Render() const
 
 void Character::Update(float elapsedSec)
 {
+	if (m_Jumped)
+	{
+		m_JumpTime += elapsedSec;
+		if (m_JumpTime >= m_TotalJumpTime)
+		{
+			m_JumpTime = 0.f;
+			m_Jumped = false;
+			b2Filter filter = m_RigidBody->GetFixtureList()->GetNext()->GetFilterData();
+
+			filter.maskBits = BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY;
+
+			m_RigidBody->GetFixtureList()->GetNext()->SetFilterData(filter);
+		}
+	}
 	Command* command = InputManager::GetInstance().HandleInput();
 	if (command != nullptr)
 	{

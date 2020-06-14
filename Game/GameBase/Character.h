@@ -60,6 +60,9 @@ private:
 	//Movement
 	float m_JumpForce;
 	float m_MoveSpeed;
+	bool m_Jumped;
+	float m_JumpTime;
+	float m_TotalJumpTime;
 	//Bubbles
 	float m_BubbleCooldown = 2.f;
 	float m_BubbleCooldownTimer = 0.f;
