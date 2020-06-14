@@ -22,7 +22,7 @@ LVB::BubbleBobbleScene::BubbleBobbleScene(GameType type)
 	:GameScene("BubbleBobbleScene")
 	, m_PhysicsWorld{nullptr}
 	,m_Player1UI{}
-	,m_Player2UI{}
+	,m_Player2UI{nullptr}
 	, m_DebugRenderer{}
 	, m_Listener{}
 	,m_LevelNumber{0}
@@ -41,7 +41,8 @@ LVB::BubbleBobbleScene::~BubbleBobbleScene()
 	delete m_DebugRenderer;
 	delete m_Listener;
 	delete m_Player1UI;
-	delete m_Player2UI;
+	if(m_Player2UI != nullptr)
+		delete m_Player2UI;
 }
 
 ContactListener* LVB::BubbleBobbleScene::GetListener() const
@@ -66,7 +67,9 @@ void LVB::BubbleBobbleScene::Initialize()
 
 	InitLevel();
 	InitPlayer();
-	SpawnEnemies();
+	if(m_Type != GameType::vs)
+		SpawnEnemies();
+
 	InitControls();
 	m_PhysicsWorld->SetContactListener(m_Listener);
 }
@@ -74,18 +77,24 @@ void LVB::BubbleBobbleScene::Initialize()
 void LVB::BubbleBobbleScene::Update(float elapsedSec)
 {
 
-	m_Player1UI->Update();
-	m_Player2UI->Update();
 
-	if (m_NumberOfEnemies <= 0)
+
+	switch (m_Type)
 	{
-		m_LevelSwapTimer += elapsedSec;
-		if (m_LevelSwapTimer >= m_LevelSwapTime)
-		{
-			LoadNewLevel();
-			m_LevelSwapTimer = 0.f;
-		}
+	case LVB::BubbleBobbleScene::solo:
+		CheckEnemies(elapsedSec);
+		m_Player1UI->Update();
+		break;
+	case LVB::BubbleBobbleScene::coop:
+		CheckEnemies(elapsedSec);
+		m_Player1UI->Update();
+		m_Player2UI->Update();
+		break;
+	case LVB::BubbleBobbleScene::vs:
+		break;
 	}
+
+	
 		
 }
 
@@ -117,12 +126,50 @@ void LVB::BubbleBobbleScene::InitLevel()
 
 void LVB::BubbleBobbleScene::InitPlayer()
 {
-	m_Player1 = new Character{Character::Player::Player1, Character::Type::bob,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
-	this->AddGameObject(m_Player1);
-	m_Listener->AddCharacter(m_Player1);
-	m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };
-	m_Player2UI = new UI{ m_Player1,UI::ScreenPos::player2,this };
-	m_Player1->NotifyUI();
+	switch (m_Type)
+	{
+	case LVB::BubbleBobbleScene::solo:
+	{
+		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		this->AddGameObject(m_Player1);
+		m_Listener->AddCharacter(m_Player1);
+		m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };
+		m_Player1->NotifyUI();
+	}
+		break;
+	case LVB::BubbleBobbleScene::coop:
+	{
+		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		this->AddGameObject(m_Player1);
+		m_Listener->AddCharacter(m_Player1);
+		m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };
+
+		m_Player2 = new Character{ Character::Player::Player2, Character::Type::bob,8,2,16 ,m_PhysicsWorld,{180,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		this->AddGameObject(m_Player2);
+		m_Listener->AddCharacter(m_Player2);
+		m_Player2UI = new UI{ m_Player2,UI::ScreenPos::player2,this };
+		m_Player1->NotifyUI();
+		m_Player2->NotifyUI();
+	}
+		break;
+	case LVB::BubbleBobbleScene::vs:
+	{
+		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		this->AddGameObject(m_Player1);
+		m_Listener->AddCharacter(m_Player1);
+		m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };
+
+		m_Player2 = new Character{ Character::Player::Player1, Character::Type::Maita,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		this->AddGameObject(m_Player2);
+		m_Listener->AddCharacter(m_Player2);
+		m_Player2UI = new UI{ m_Player2,UI::ScreenPos::player2,this };
+		m_Player1->NotifyUI();
+		m_Player2->NotifyUI();
+	}
+		break;		
+	}
+
+
 
 }
 
@@ -143,8 +190,16 @@ void LVB::BubbleBobbleScene::LoadNewLevel()
 	m_LevelObjects.reserve(100);
 	
 	LoadLevel(positions);
+	if (m_Type == GameType::solo)
+	{
+		m_Player1->SetToSpawnPos();
+	}
+	else
+	{
+		m_Player1->SetToSpawnPos();
+		m_Player2->SetToSpawnPos();
+	}
 
-	m_Player1->SetToSpawnPos();
 	SpawnEnemies();
 }
 
@@ -239,4 +294,17 @@ void LVB::BubbleBobbleScene::InitControls()
 	InputManager::GetInstance().BindToController<MoveRightCommand>(LVB::ControllerButton::DPad_Right, m_Player1);
 	InputManager::GetInstance().BindToController<FireCommand>(LVB::ControllerButton::ButtonB, m_Player1);
 
+}
+
+void LVB::BubbleBobbleScene::CheckEnemies(float elapsedSec)
+{
+	if (m_NumberOfEnemies <= 0)
+	{
+		m_LevelSwapTimer += elapsedSec;
+		if (m_LevelSwapTimer >= m_LevelSwapTime)
+		{
+			LoadNewLevel();
+			m_LevelSwapTimer = 0.f;
+		}
+	}
 }

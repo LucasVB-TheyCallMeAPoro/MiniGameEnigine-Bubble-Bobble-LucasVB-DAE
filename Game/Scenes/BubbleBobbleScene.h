@@ -72,6 +72,7 @@ namespace LVB
 		void SpawnEnemies();
 
 		void InitControls();
+		void CheckEnemies(float elapsedSec);
 		//Level
 		std::vector<GameObject*> m_LevelObjects;
 		std::vector<b2Body*> m_LevelBodies;
