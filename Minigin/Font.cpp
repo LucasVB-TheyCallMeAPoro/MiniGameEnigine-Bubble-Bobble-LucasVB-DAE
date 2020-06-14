@@ -18,4 +18,5 @@ LVB::Font::Font(const std::string& fullPath, unsigned int size) : m_Font(nullptr
 LVB::Font::~Font()
 {
 	TTF_CloseFont(m_Font);
+	
 }

@@ -12,7 +12,7 @@
 #include "Bubble.h"
 #include "GameScene.h"
 #include "../Scenes/BubbleBobbleScene.h"
-Character::Character(Character::Type type, int columnCount, int rowCount, int totalRowCount, b2World* world, const glm::vec2& spawnPos, LVB::GameScene* scene, unsigned short categoryMask, unsigned short maskBits)
+Character::Character(Player p,Character::Type type, int columnCount, int rowCount, int totalRowCount, b2World* world, const glm::vec2& spawnPos, LVB::GameScene* scene, unsigned short categoryMask, unsigned short maskBits)
 	:m_Type{type}
 	,m_AnimTime{0.f}
 	,m_ColumnCount{columnCount}
@@ -30,6 +30,8 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	, m_Jumped{ false }
 	,m_TotalJumpTime{1.f}
 	,m_JumpTime{0}
+	,m_Player{p}
+	, m_SensorName{nullptr}
 {
 
 	b2BodyDef bodyDef;
@@ -47,7 +49,6 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	fixtureDef.friction = 0.3f;
 	fixtureDef.filter.categoryBits = categoryMask;
 	fixtureDef.filter.groupIndex = maskBits;
-	fixtureDef.userData = (void*)2;
 	m_RigidBody->CreateFixture(&fixtureDef);
 
 	m_RigidBody->SetSleepingAllowed(false);
@@ -57,15 +58,31 @@ Character::Character(Character::Type type, int columnCount, int rowCount, int to
 	dynamicBox.SetAsBox(4, 2, b2Vec2(0, 8), 0);
 	fixtureDef.isSensor = true;
 	b2Fixture* footSensorFixture = m_RigidBody->CreateFixture(&fixtureDef);
-	footSensorFixture->SetUserData((void*)"FootSensor");
+
+	footSensorFixture->SetUserData((void*)footSensorFixture);
 	
-	m_RigidBody->SetUserData(this);
+	m_RigidBody->SetUserData((void*)m_RigidBody);
 	SetTexture("BBSprites/Sprites0.png");
 	int spriteHeight = GetTexture()->GetHeight() / totalRowCount;
 	SetSprite(glm::ivec2(0, 0 + static_cast<unsigned int>(m_Type) * spriteHeight * 2), GetTexture()->GetWidth() / columnCount, spriteHeight, columnCount, rowCount);
 
 	InitControls();
 
+}
+
+Character::~Character()
+{
+	delete m_SensorName;
+}
+
+b2Fixture* Character::GetBody() const
+{
+	return m_RigidBody->GetFixtureList()->GetNext();
+}
+
+b2Fixture* Character::GetFootSensor() const
+{
+	return m_RigidBody->GetFixtureList();
 }
 
 void Character::Shoot()
@@ -150,6 +167,18 @@ void Character::SetToSpawnPos()
 {
 	this->GetTransform()->SetPosition(m_SpawnPosition.x, m_SpawnPosition.y, 0);
 	m_RigidBody->SetTransform({ m_SpawnPosition.x,m_SpawnPosition.y }, 0);
+}
+
+void Character::IncrementFootCount()
+{
+	m_FootContactCount++;
+}
+
+void Character::DecrementFootCount()
+{
+	if (m_FootContactCount - 1 < 0)
+		m_FootContactCount = 0;
+	m_FootContactCount--;
 }
 
 void Character::Render() const

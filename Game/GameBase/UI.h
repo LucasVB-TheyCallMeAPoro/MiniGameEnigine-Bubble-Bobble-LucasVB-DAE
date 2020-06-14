@@ -34,6 +34,7 @@ public:
 	UI(Character* character,ScreenPos pos, LVB::GameScene* scene);
 	void Render() const;
 	void Update();
+	void SetLevelNumber(int i);
 private:
 	ScoreListener m_ScoreListener;
 	HealthListener m_HealthListener;
@@ -41,4 +42,6 @@ private:
 	LVB::GameObject* m_HealthObject;
 	Character* m_Character;
 	ScreenPos m_Pos;
+
+	LVB::GameObject* m_LevelNumberObject;
 };

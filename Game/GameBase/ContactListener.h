@@ -2,6 +2,9 @@
 #include "Box2D.h"
 #include "Character.h"
 #include "Bubble.h"
+#include "Enemies.h"
+#include <string>
+#include <cstring>
 //https://www.iforce2d.net/b2dtut/one-way-walls
 //https://www.iforce2d.net/b2dtut/jumpability
 //https://www.iforce2d.net/b2dtut/collision-filtering
@@ -15,42 +18,60 @@ namespace LVB
 
             IsGrounded(contact);
             BubbleOverlap(contact);
-          
+            EnemyHitWall(contact);
         }
 
         void EndContact(b2Contact* contact) {
             //check if fixture A was the foot sensor
-            void* fixtureUserData = contact->GetFixtureA()->GetUserData();
-            if ((char*)fixtureUserData == "FootSensor")
+            void* fixtureUserDataA = contact->GetFixtureA();
+            void* fixtureUserDataB = contact->GetFixtureB();
+            for (int i{ 0 }; i < m_Characters.size(); ++i)
             {
-                m_Parent->m_FootContactCount--;
+                if (fixtureUserDataA == m_Characters[i]->GetFootSensor() || fixtureUserDataB == m_Characters[i]->GetFootSensor())
+                {
+                    m_Characters[i]->DecrementFootCount();
+                }
             }
-            //check if fixture B was the foot sensor
-            fixtureUserData = contact->GetFixtureB()->GetUserData();
-            if ((char*)fixtureUserData == "FootSensor" )
+
+            for (int i{ 0 }; i < m_Enemies.size(); ++i)
             {
-                m_Parent->m_FootContactCount--;
+                if (fixtureUserDataA == m_Enemies[i]->GetFootSensor() || fixtureUserDataB == m_Enemies[i]->GetFootSensor())
+                {
+                    m_Enemies[i]->DecrementFootCount();
+                }
             }
 
         }
-         void SetCharacter(Character * character) { m_Parent = character; }
+         void AddCharacter(Character * character) { m_Characters.push_back(character); }
+        
+         void AddEnemy(Enemy* e) { m_Enemies.push_back(e); }
+         void ClearEnemies() { m_Enemies.clear(); }
     private:
-        Character* m_Parent;
-      
+        std::vector<Character*> m_Characters;
+        std::vector<Enemy*> m_Enemies;
         void IsGrounded(b2Contact* contact)
         {
             //Check if grounded code
            //check if fixture A was the foot sensor
-            void* fixtureUserData = contact->GetFixtureA()->GetUserData();
-            if ((char*)fixtureUserData == "FootSensor")
+            auto fixtureUserDataA = contact->GetFixtureA();
+            auto fixtureUserDataB = contact->GetFixtureB();
+
+            for (int i{ 0 }; i < m_Characters.size(); ++i)
             {
-                m_Parent->m_FootContactCount++;
+                //&& fixtureUserDataB == &LVB::BubbleBobbleScene::keyPlatform)
+                // && fixtureUserDataA == &LVB::BubbleBobbleScene::keyPlatform
+                if ((fixtureUserDataA == m_Characters[i]->GetFootSensor() && fixtureUserDataB->GetFilterData().categoryBits == LVB::BubbleBobbleScene::PLATFORM) || (fixtureUserDataB == m_Characters[i]->GetFootSensor() && fixtureUserDataA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::PLATFORM))
+                {
+                    m_Characters[i]->IncrementFootCount();
+                }
             }
-            //check if fixture B was the foot sensor
-            fixtureUserData = contact->GetFixtureB()->GetUserData();
-            if ((char*)fixtureUserData == "FootSensor")
+
+            for (int i{ 0 }; i < m_Enemies.size(); ++i)
             {
-                m_Parent->m_FootContactCount++;
+                if ((fixtureUserDataA == m_Enemies[i]->GetFootSensor() && fixtureUserDataB->GetFilterData().categoryBits == LVB::BubbleBobbleScene::PLATFORM) || (fixtureUserDataB == m_Enemies[i]->GetFootSensor() && fixtureUserDataA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::PLATFORM))
+                {
+                    m_Enemies[i]->IncrementFootCount();
+                }
             }
         }
         void BubbleOverlap(b2Contact* contact)
@@ -63,6 +84,7 @@ namespace LVB
             if (!(sensorA ^ sensorB))
                 return;
             Bubble* bubble{};
+
            if(sensorA)
                bubble = reinterpret_cast<Bubble*>(fixtureA->GetBody()->GetUserData());
            else
@@ -74,15 +96,33 @@ namespace LVB
            {
                if (sensorA)
                {
-                   if (m_Parent->GetBody()->GetUserData() == fixtureB->GetBody()->GetUserData())
-                       bubble->Hit();
+                   for (int i{ 0 }; i < m_Characters.size(); ++i)
+                   {
+                       if (fixtureB == m_Characters[i]->GetBody())
+                           bubble->Hit();
+                   }
                }
                else
                {
-                   if (m_Parent->GetBody()->GetUserData() == fixtureA->GetBody()->GetUserData())
-                       bubble->Hit();
+                   for (int i{ 0 }; i < m_Characters.size(); ++i)
+                   {
+                       if (fixtureA == m_Characters[i]->GetBody())
+                           bubble->Hit();
+                   }
                }
            }
+        }
+        void EnemyHitWall(b2Contact* contact) 
+        {
+            auto fixtureA = contact->GetFixtureA();
+            auto fixtureB = contact->GetFixtureB();
+            void* fixtureUserDataA = fixtureA->GetUserData();
+            void* fixtureUserDataB = fixtureB->GetUserData();
+            for (int i{ 0 }; i < m_Enemies.size(); ++i)
+            {
+                if ((fixtureA == m_Enemies[i]->GetRigidBodyFixture() && fixtureB->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOUNDARY) || (fixtureB == m_Enemies[i]->GetRigidBodyFixture() && fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOUNDARY))
+                    m_Enemies[i]->HitWall();
+            }
         }
 	};
 }

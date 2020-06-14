@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="GameBase\Bubble.cpp" />
     <ClCompile Include="GameBase\Character.cpp" />
+    <ClCompile Include="GameBase\Enemies.cpp" />
     <ClCompile Include="GameBase\Level.cpp" />
     <ClCompile Include="GameBase\UI.cpp" />
     <ClCompile Include="Scenes\BubbleBobbleScene.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="GameBase\ContactListener.h" />
     <ClInclude Include="GameBase\Level.h" />
     <ClInclude Include="GameBase\UI.h" />
+    <ClInclude Include="GameBase\Enemies.h" />
     <ClInclude Include="Scenes\BubbleBobbleScene.h" />
     <ClInclude Include="Commands\GameCommands.h" />
     <ClInclude Include="Scenes\CommandAssignmentScene.h" />

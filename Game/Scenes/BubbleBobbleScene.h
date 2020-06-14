@@ -4,6 +4,8 @@
 #include "Box2D.h"
 #include "../GameBase/UI.h"
 #include "../GameBase/Level.h"
+#include "../GameBase/Enemies.h"
+#include "Font.h"
 class PhysicsDebugRenderer;
 namespace LVB
 {
@@ -12,6 +14,8 @@ namespace LVB
 	class BubbleBobbleScene : public LVB::GameScene
 	{		
 	public:
+		static const int keyPlatform;
+		static const int keyWall;
 		enum entityType {
 			BOUNDARY = 0x0001,
 			PLATFORM = 0x0002,
@@ -41,15 +45,23 @@ namespace LVB
 		std::size_t m_LevelNumber;
 		std::vector<Level> m_Levels;
 
+		float m_EnemySpawnOffsetTime{ 1.f };
+		float m_EnemySpawnTimer{ 0.f };
+
 		void InitLevel();
 		void InitPlayer();
 
 		void LoadNewLevel();
 		void LoadLevel(const std::vector<glm::ivec2>& positions);
 
+		void SpawnEnemies();
+
+		
 		//Level
 		std::vector<GameObject*> m_LevelObjects;
 		std::vector<b2Body*> m_LevelBodies;
+
+		GameObject* m_LevelText;
 	};
 }
 
