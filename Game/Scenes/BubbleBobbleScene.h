@@ -22,7 +22,8 @@ namespace LVB
 			CHARACTER = 0x0004,
 			ENEMY = 0x0008,
 			BUBBLE = 0x000a,
-			PICKUP = 0x000c
+			PICKUP = 0x000c,
+			BOULDER = 0x0010,
 		};
 		enum GameType
 		{
@@ -72,7 +73,7 @@ namespace LVB
 		void SpawnEnemies();
 
 		void InitControls();
-		void CheckEnemies(float elapsedSec);
+		void CheckLevel(float elapsedSec);
 		//Level
 		std::vector<GameObject*> m_LevelObjects;
 		std::vector<b2Body*> m_LevelBodies;

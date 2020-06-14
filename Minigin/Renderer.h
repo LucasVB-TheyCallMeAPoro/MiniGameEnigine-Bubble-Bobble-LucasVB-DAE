@@ -7,7 +7,7 @@
 #pragma warning(pop)
 struct SDL_Window;
 struct SDL_Renderer;
-
+struct SDL_Rect;
 namespace LVB
 {
 	class Texture2D;

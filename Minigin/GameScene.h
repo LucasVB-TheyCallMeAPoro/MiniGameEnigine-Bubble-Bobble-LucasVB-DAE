@@ -27,9 +27,6 @@ namespace LVB
 		virtual void LateUpdate(float) = 0;
 		virtual void Render() const = 0;
 
-		virtual void SceneActivated() {}
-		virtual void SceneDeactivated() {}
-
 	private:
 
 		void RootRender() const;

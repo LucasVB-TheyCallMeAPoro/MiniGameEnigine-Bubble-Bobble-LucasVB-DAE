@@ -51,6 +51,7 @@ public:
 	void SetToSpawnPos();
 	void IncrementFootCount();
 	void DecrementFootCount();
+	int GetHealth() const {return m_Health;}
 	bool IsGrounded() { return !m_Jumped; }
 protected:
 	virtual void Render() const override;

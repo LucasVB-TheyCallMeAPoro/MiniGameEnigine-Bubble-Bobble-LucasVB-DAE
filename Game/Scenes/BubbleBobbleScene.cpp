@@ -82,11 +82,11 @@ void LVB::BubbleBobbleScene::Update(float elapsedSec)
 	switch (m_Type)
 	{
 	case LVB::BubbleBobbleScene::solo:
-		CheckEnemies(elapsedSec);
+		CheckLevel(elapsedSec);
 		m_Player1UI->Update();
 		break;
 	case LVB::BubbleBobbleScene::coop:
-		CheckEnemies(elapsedSec);
+		CheckLevel(elapsedSec);
 		m_Player1UI->Update();
 		m_Player2UI->Update();
 		break;
@@ -130,7 +130,7 @@ void LVB::BubbleBobbleScene::InitPlayer()
 	{
 	case LVB::BubbleBobbleScene::solo:
 	{
-		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP | BubbleBobbleScene::BOULDER };
 		this->AddGameObject(m_Player1);
 		m_Listener->AddCharacter(m_Player1);
 		m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };
@@ -139,12 +139,12 @@ void LVB::BubbleBobbleScene::InitPlayer()
 		break;
 	case LVB::BubbleBobbleScene::coop:
 	{
-		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP | BubbleBobbleScene::BOULDER };
 		this->AddGameObject(m_Player1);
 		m_Listener->AddCharacter(m_Player1);
 		m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };
 
-		m_Player2 = new Character{ Character::Player::Player2, Character::Type::bob,8,2,16 ,m_PhysicsWorld,{180,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		m_Player2 = new Character{ Character::Player::Player2, Character::Type::bob,8,2,16 ,m_PhysicsWorld,{180,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP | BubbleBobbleScene::BOULDER };
 		this->AddGameObject(m_Player2);
 		m_Listener->AddCharacter(m_Player2);
 		m_Player2UI = new UI{ m_Player2,UI::ScreenPos::player2,this };
@@ -154,7 +154,7 @@ void LVB::BubbleBobbleScene::InitPlayer()
 		break;
 	case LVB::BubbleBobbleScene::vs:
 	{
-		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
+		m_Player1 = new Character{ Character::Player::Player1, Character::Type::Bub,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP | BubbleBobbleScene::BOULDER };
 		this->AddGameObject(m_Player1);
 		m_Listener->AddCharacter(m_Player1);
 		m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };
@@ -296,15 +296,36 @@ void LVB::BubbleBobbleScene::InitControls()
 
 }
 
-void LVB::BubbleBobbleScene::CheckEnemies(float elapsedSec)
+void LVB::BubbleBobbleScene::CheckLevel(float elapsedSec)
 {
+
 	if (m_NumberOfEnemies <= 0)
 	{
 		m_LevelSwapTimer += elapsedSec;
 		if (m_LevelSwapTimer >= m_LevelSwapTime)
 		{
+			if (m_LevelNumber + 1 == 3)
+			{
+				SceneManager::GetInstance().SetActiveGameScene("VictoryScene");
+				return;
+			}
 			LoadNewLevel();
 			m_LevelSwapTimer = 0.f;
+			return;
 		}
 	}
+
+	if (m_Player1->GetHealth() <= 0)
+	{
+		SceneManager::GetInstance().SetActiveGameScene("LoseScene");
+		return;
+	}
+	if (m_Player2 != nullptr)
+	{
+		if (m_Player2->GetHealth() <= 0)
+		{
+			SceneManager::GetInstance().SetActiveGameScene("LoseScene");
+		}
+	}
+	
 }

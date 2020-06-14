@@ -4,6 +4,7 @@
 #include "Bubble.h"
 #include "Pickup.h"
 #include "Enemies.h"
+#include "Boulder.h"
 #include <string>
 #include <cstring>
 //https://www.iforce2d.net/b2dtut/one-way-walls
@@ -22,6 +23,7 @@ namespace LVB
             EnemyHitWall(contact);
             EnemyHitPlayer(contact);
             PlayerHitPickUp(contact);
+            BoulderHitPlayer(contact);
         }
 
         void EndContact(b2Contact* contact) {
@@ -221,6 +223,40 @@ namespace LVB
                 {
                     if (fixtureA == m_Characters[i]->GetBody())
                         pickUp->PickedUp(m_Characters[i]);
+                }
+            }
+        }
+        void BoulderHitPlayer(b2Contact* contact)
+        {
+            auto fixtureA = contact->GetFixtureA();
+            auto fixtureB = contact->GetFixtureB();
+
+            if (fixtureA->GetFilterData().categoryBits != LVB::BubbleBobbleScene::BOULDER && fixtureB->GetFilterData().categoryBits != LVB::BubbleBobbleScene::BOULDER)
+                return;
+
+            Boulder* boulder{};
+            if (fixtureA->GetFilterData().categoryBits != LVB::BubbleBobbleScene::BOULDER)
+                boulder = reinterpret_cast<Boulder*>(fixtureB->GetBody()->GetUserData());
+            else
+                boulder = reinterpret_cast<Boulder*>(fixtureA->GetBody()->GetUserData());
+
+            if (boulder == nullptr)
+                return;
+
+            if (fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOULDER)
+            {
+                for (int i{ 0 }; i < m_Characters.size(); ++i)
+                {
+                    if (fixtureB == m_Characters[i]->GetBody())
+                        boulder->Hit(m_Characters[i]);
+                }
+            }
+            else
+            {
+                for (int i{ 0 }; i < m_Characters.size(); ++i)
+                {
+                    if (fixtureA == m_Characters[i]->GetBody())
+                        boulder->Hit(m_Characters[i]);
                 }
             }
         }
