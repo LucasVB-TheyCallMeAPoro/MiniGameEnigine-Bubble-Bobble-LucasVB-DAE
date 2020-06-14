@@ -160,6 +160,8 @@
     <ClCompile Include="Scenes\CommandAssignmentScene.cpp" />
     <ClCompile Include="Scenes\DemoScene.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="Scenes\LoseScene.cpp" />
+    <ClCompile Include="Scenes\VictorySCENE.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase\Bubble.h" />
@@ -171,6 +173,8 @@
     <ClInclude Include="Commands\GameCommands.h" />
     <ClInclude Include="Scenes\CommandAssignmentScene.h" />
     <ClInclude Include="Scenes\DemoScene.h" />
+    <ClInclude Include="Scenes\LoseScene.h" />
+    <ClInclude Include="Scenes\VictorySCENE.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

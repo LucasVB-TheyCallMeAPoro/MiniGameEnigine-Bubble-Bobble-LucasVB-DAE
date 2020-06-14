@@ -24,7 +24,7 @@ private:
 	float m_LifeTime;
 	float m_Timer;
 	float m_AnimTime = 0;
-
+	float m_RiseForce = -20;
 	bool m_IsHit = false;
 	void Destroy();
 };

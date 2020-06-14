@@ -50,7 +50,6 @@ namespace LVB
 		//Level
 		std::vector<GameObject*> m_LevelObjects;
 		std::vector<b2Body*> m_LevelBodies;
-		std::vector<b2Body*> m_PlatformBodies;
 	};
 }
 

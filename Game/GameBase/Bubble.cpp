@@ -48,7 +48,7 @@ void Bubble::Render() const
 
 void Bubble::Update(float elapsedSec)
 {
-	m_RigidBody->SetLinearVelocity({ 0,-4 });
+	m_RigidBody->SetLinearVelocity({ 0,m_RiseForce });
 	auto rigPos = m_RigidBody->GetTransform();
 	this->GetTransform()->SetPosition(rigPos.p.x, rigPos.p.y, 0);
 	m_Timer += elapsedSec;

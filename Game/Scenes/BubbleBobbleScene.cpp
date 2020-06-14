@@ -22,7 +22,6 @@ LVB::BubbleBobbleScene::BubbleBobbleScene()
 	,m_LevelNumber{1}
 	, m_Levels{}
 	,m_Player1{}
-	, m_PlatformBodies{}
 {
 	Initialize();
 }
@@ -138,15 +137,10 @@ void LVB::BubbleBobbleScene::LoadLevel(const std::vector<glm::ivec2>& positions)
 
 		if (positions[i].x > 1 && positions[i].y > 0 && positions[i].x < 30 && positions[i].y < 24)
 		{
-
 			fixtureDef.filter.categoryBits = PLATFORM;
-			m_LevelBodies.back()->CreateFixture(&fixtureDef);
-			m_PlatformBodies.push_back(m_LevelBodies.back());
 		}
-		else
-		{
-			m_LevelBodies.back()->CreateFixture(&fixtureDef);
-		}
+		m_LevelBodies.back()->CreateFixture(&fixtureDef);
+
 
 		AddGameObject(m_LevelObjects.back());
 	}
