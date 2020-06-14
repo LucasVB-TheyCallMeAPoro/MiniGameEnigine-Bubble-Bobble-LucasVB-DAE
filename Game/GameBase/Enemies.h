@@ -21,7 +21,9 @@ public:
 	{
 		MoveLeft,
 		MoveRight,
-		Attacking
+		Attacking,
+		InBubble,
+		Dead
 	};
 	Enemy(int id,State state,Type type,glm::vec2 spawnPos, int columnCount, int rowCount, int TotalRowCount ,LVB::GameScene* scene, b2World* world, unsigned short categoryMask, unsigned short maskBits);
 	~Enemy();
@@ -30,6 +32,11 @@ public:
 	b2Fixture* GetFootSensor();
 	void IncrementFootCount();
 	void DecrementFootCount();
+
+	void HitByBubble(const glm::vec3& pos, float yspeed, float time);
+	void Kill();
+
+	Enemy::State GetState() const { return m_State; }
 private:
 	float m_AnimTime;
 	Type m_Type;
@@ -38,15 +45,19 @@ private:
 	b2World* m_PhysicsWorld;
 	LVB::GameScene* m_Scene;
 
-	std::string m_SensorName;
-	std::string m_BodyName;
-
 	//Movement
 	float m_JumpForce;
 	float m_MoveSpeed;
 	int m_FootContactCount = 0;
 	float m_SwapTime = 1.f;
 	float m_SwapTimer = 1.f;
+
+	//IF IN BUBBLE
+	float m_UpwardsSpeed;
+	glm::vec2 m_BubblePos;
+	bool m_Hit;
+	float m_FloatingDuration = 0;
+	float m_FloatTimer = 0;
 	//Behavior
 	int m_HitWallCounter = 0;
 	int m_PreviousCounter = 0;
@@ -60,4 +71,5 @@ private:
 	void MoveRightBehavior(float elapsedSec);
 	void AttackBehavior(float elapsedSec);
 	void UpdateSprite(float elapsedSec);
+	void Destroy();
 };

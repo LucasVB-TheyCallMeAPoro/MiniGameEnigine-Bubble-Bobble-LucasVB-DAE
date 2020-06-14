@@ -28,6 +28,7 @@ LVB::BubbleBobbleScene::BubbleBobbleScene()
 	, m_Levels{}
 	,m_Player1{}
 	, m_LevelText{}
+	, m_NumberOfEnemies{}
 {
 	Initialize();
 }
@@ -39,6 +40,11 @@ LVB::BubbleBobbleScene::~BubbleBobbleScene()
 	delete m_Listener;
 	delete m_Player1UI;
 	delete m_Player2UI;
+}
+
+ContactListener* LVB::BubbleBobbleScene::GetListener() const
+{
+	return m_Listener;
 }
 
 void LVB::BubbleBobbleScene::Initialize()
@@ -66,6 +72,17 @@ void LVB::BubbleBobbleScene::Update(float elapsedSec)
 {
 	m_Player1UI->Update();
 	m_Player2UI->Update();
+
+	if (m_NumberOfEnemies <= 0)
+	{
+		m_LevelSwapTimer += elapsedSec;
+		if (m_LevelSwapTimer >= m_LevelSwapTime)
+		{
+			LoadNewLevel();
+			m_LevelSwapTimer = 0.f;
+		}
+	}
+		
 }
 
 void LVB::BubbleBobbleScene::LateUpdate(float)
@@ -96,7 +113,7 @@ void LVB::BubbleBobbleScene::InitLevel()
 
 void LVB::BubbleBobbleScene::InitPlayer()
 {
-	m_Player1 = new Character{Character::Player::Player1, Character::Type::bob,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY };
+	m_Player1 = new Character{Character::Player::Player1, Character::Type::bob,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE };
 	this->AddGameObject(m_Player1);
 	m_Listener->AddCharacter(m_Player1);
 	m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };
@@ -124,6 +141,7 @@ void LVB::BubbleBobbleScene::LoadNewLevel()
 	LoadLevel(positions);
 
 	m_Player1->SetToSpawnPos();
+	SpawnEnemies();
 }
 
 void LVB::BubbleBobbleScene::LoadLevel(const std::vector<glm::ivec2>& positions)
@@ -160,36 +178,38 @@ void LVB::BubbleBobbleScene::LoadLevel(const std::vector<glm::ivec2>& positions)
 void LVB::BubbleBobbleScene::SpawnEnemies()
 {
 	m_Listener->ClearEnemies();
-	int enemyCount = m_LevelNumber + 3;
+	m_NumberOfEnemies = m_LevelNumber + 3;
 	int randomNumOfMaita = 0;
-
+	int spawnOffset = 30;
 	if (m_LevelNumber > 0)
 	{
 		
 
 		std::ranlux48 generator;
-		std::uniform_int_distribution<int> distribution(1, enemyCount);
+		std::uniform_int_distribution<int> distribution(1, m_NumberOfEnemies);
 		randomNumOfMaita = distribution(generator);
 	}
-	glm::vec2 spawnPos{	110,20 };
+	glm::vec2 spawnPos{	80,20 };
 	for (int i{ 0 }; i <  randomNumOfMaita; ++i)
 	{
 		auto state = Enemy::State::MoveLeft;
 		if (i > randomNumOfMaita / 2)
 			state = Enemy::State::MoveRight;
 
-		Enemy* enemy = new Enemy{ i,state,Enemy::Type::Maita,spawnPos,8,2,16,this,m_PhysicsWorld,BubbleBobbleScene::ENEMY, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::CHARACTER };
+		Enemy* enemy = new Enemy{ i,state,Enemy::Type::Maita,spawnPos,8,2,16,this,m_PhysicsWorld,BubbleBobbleScene::ENEMY, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::CHARACTER | BubbleBobbleScene::BUBBLE };
 		this->AddGameObject(enemy);
 		m_Listener->AddEnemy(enemy);
+		spawnPos.x += spawnOffset;
 	}
-	for (int i{ randomNumOfMaita }; i <  enemyCount; ++i)
+	for (int i{ randomNumOfMaita }; i < m_NumberOfEnemies; ++i)
 	{
 		auto state = Enemy::State::MoveLeft;
 		if (i > randomNumOfMaita / 2)
 			state = Enemy::State::MoveRight;
 
-		Enemy* enemy = new Enemy{ i,state,Enemy::Type::ZenChan,spawnPos,8,2,16,this,m_PhysicsWorld,BubbleBobbleScene::ENEMY, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::CHARACTER };
+		Enemy* enemy = new Enemy{ i,state,Enemy::Type::ZenChan,spawnPos,8,2,16,this,m_PhysicsWorld,BubbleBobbleScene::ENEMY, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::CHARACTER |  BubbleBobbleScene::BUBBLE };
 		this->AddGameObject(enemy);
 		m_Listener->AddEnemy(enemy);
+		spawnPos.x += spawnOffset;
 	}
 }

@@ -30,6 +30,9 @@ namespace LVB
 		BubbleBobbleScene& operator=(const BubbleBobbleScene& other) = delete;
 		BubbleBobbleScene& operator=(BubbleBobbleScene&& other) noexcept = delete;
 
+		void EnemyKilled() { m_NumberOfEnemies--; }
+
+		ContactListener* GetListener() const;
 	protected:
 		void Initialize() override;
 		void Update(float elapsedSec) override;
@@ -44,9 +47,12 @@ namespace LVB
 		Character* m_Player1;
 		std::size_t m_LevelNumber;
 		std::vector<Level> m_Levels;
-
+		int m_NumberOfEnemies;
 		float m_EnemySpawnOffsetTime{ 1.f };
 		float m_EnemySpawnTimer{ 0.f };
+
+		float m_LevelSwapTimer = 0;
+		float m_LevelSwapTime = 5.f;
 
 		void InitLevel();
 		void InitPlayer();

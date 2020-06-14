@@ -38,10 +38,12 @@ namespace LVB
 		
 		friend class SceneManager;
 		std::vector<GameObject*> m_pGameObjects;
+		std::vector<GameObject*> m_pToRemove;
 		std::string m_SceneName;
 
 		//For Threading
 		static void UpdateGameObjects(GameScene* scene,float elapsed, std::size_t begin, std::size_t end);
+		void pRemoveGameObject(GameObject* obj);
 	};
 }
 

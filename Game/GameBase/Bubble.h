@@ -14,6 +14,10 @@ public:
 	
 
 	void Hit() { m_IsHit = true; }
+	float GetSpeed() const { return m_RiseForce; }
+
+	float GetLifeTime() const { return m_LifeTime; }
+	float GetTimer() const { return m_Timer; }
 protected:
 	virtual void Render() const override;
 	virtual void Update(float elapsedSec) override;

@@ -4,6 +4,7 @@
 #include "Spritesheet.h"
 #include "Transform.h"
 #include "GameScene.h"
+#include "../Scenes/BubbleBobbleScene.h"
 Bubble::Bubble(b2World* world, const glm::vec2& spawnPos, LVB::GameScene* scene)
 	:m_LifeTime{5}
 	,m_RigidBody{nullptr}
@@ -16,13 +17,14 @@ Bubble::Bubble(b2World* world, const glm::vec2& spawnPos, LVB::GameScene* scene)
 	m_RigidBody = world->CreateBody(&bodyDef);
 
 	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(8, 8);
+	dynamicBox.SetAsBox(9,9);
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 1.f;
 	fixtureDef.friction = 0.3f;
 	fixtureDef.isSensor = true;
-
+	fixtureDef.filter.categoryBits = LVB::BubbleBobbleScene::BUBBLE;
+	fixtureDef.filter.maskBits = LVB::BubbleBobbleScene::CHARACTER | LVB::BubbleBobbleScene::ENEMY;
 	m_RigidBody->CreateFixture(&fixtureDef);
 	m_RigidBody->SetFixedRotation(true);
 

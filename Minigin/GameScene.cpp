@@ -31,16 +31,7 @@ void LVB::GameScene::AddGameObject(GameObject* obj)
 
 void LVB::GameScene::RemoveGameObject(GameObject* obj)
 {
-	const auto it = find(m_pGameObjects.begin(), m_pGameObjects.end(), obj);
-	if (it == m_pGameObjects.end())
-	{
-		std::cout << "Gameobject is not found!\n";
-		return;
-	}
-
-	m_pGameObjects.erase(it);
-	delete obj;
-	obj = nullptr;
+	m_pToRemove.push_back(obj);
 }
 
 const std::vector<LVB::GameObject*>& LVB::GameScene::GetGameObjects() const
@@ -97,6 +88,11 @@ void LVB::GameScene::RootUpdate(float elapsedSec)
 	{
 		fut.get();
 	}
+
+	for (int i{ 0 }; i < m_pToRemove.size(); ++i)
+		pRemoveGameObject(m_pToRemove[i]);
+
+	m_pToRemove.clear();
 }
 
 void LVB::GameScene::UpdateGameObjects(GameScene* scene,float elapsedSec, std::size_t begin, std::size_t end)
@@ -106,4 +102,18 @@ void LVB::GameScene::UpdateGameObjects(GameScene* scene,float elapsedSec, std::s
 	{
 		objects[i]->RootUpdate(elapsedSec);
 	}
+}
+
+void LVB::GameScene::pRemoveGameObject(GameObject* obj)
+{
+	const auto it = find(m_pGameObjects.begin(), m_pGameObjects.end(), obj);
+	if (it == m_pGameObjects.end())
+	{
+		std::cout << "Gameobject is not found!\n";
+		return;
+	}
+
+	m_pGameObjects.erase(it);
+	delete obj;
+	obj = nullptr;
 }

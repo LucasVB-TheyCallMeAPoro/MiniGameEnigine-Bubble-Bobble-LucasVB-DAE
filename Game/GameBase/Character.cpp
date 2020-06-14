@@ -48,7 +48,7 @@ Character::Character(Player p,Character::Type type, int columnCount, int rowCoun
 	fixtureDef.density = 1.f;
 	fixtureDef.friction = 0.3f;
 	fixtureDef.filter.categoryBits = categoryMask;
-	fixtureDef.filter.groupIndex = maskBits;
+	fixtureDef.filter.maskBits = maskBits;
 	m_RigidBody->CreateFixture(&fixtureDef);
 
 	m_RigidBody->SetSleepingAllowed(false);

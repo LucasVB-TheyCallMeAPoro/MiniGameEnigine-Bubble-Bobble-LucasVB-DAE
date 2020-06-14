@@ -78,7 +78,7 @@ private:
 	float m_TotalJumpTime;
 	int m_FootContactCount = 0;
 	//Bubbles
-	float m_BubbleCooldown = 2.f;
+	float m_BubbleCooldown = 1.f;
 	float m_BubbleCooldownTimer = 0.f;
 	bool m_Shot;
 
