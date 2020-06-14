@@ -54,7 +54,7 @@ LVB::SceneManager::SceneManager()
 
 LVB::SceneManager::~SceneManager()
 {
-	for (int i{ 0 }; i < m_GameScenes.size(); ++i)
+	for (std::size_t i{ 0 }; i < m_GameScenes.size(); ++i)
 	{
 		delete m_GameScenes[i];
 	}

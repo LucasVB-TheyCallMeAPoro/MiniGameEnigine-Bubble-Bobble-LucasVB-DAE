@@ -30,7 +30,7 @@ namespace LVB
             //check if fixture A was the foot sensor
             auto fixtureUserDataA = contact->GetFixtureA();
             auto fixtureUserDataB = contact->GetFixtureB();
-            for (int i{ 0 }; i < m_Characters.size(); ++i)
+            for (std::size_t i{ 0 }; i < m_Characters.size(); ++i)
             {
                 if (fixtureUserDataA == m_Characters[i]->GetFootSensor() || fixtureUserDataB == m_Characters[i]->GetFootSensor())
                 {
@@ -38,7 +38,7 @@ namespace LVB
                 }
             }
 
-            for (int i{ 0 }; i < m_Enemies.size(); ++i)
+            for (std::size_t i{ 0 }; i < m_Enemies.size(); ++i)
             {
                 if (m_Enemies[i] == nullptr)
                     continue;
@@ -74,7 +74,7 @@ namespace LVB
             auto fixtureUserDataA = contact->GetFixtureA();
             auto fixtureUserDataB = contact->GetFixtureB();
 
-            for (int i{ 0 }; i < m_Characters.size(); ++i)
+            for (std::size_t i{ 0 }; i < m_Characters.size(); ++i)
             {
                 //&& fixtureUserDataB == &LVB::BubbleBobbleScene::keyPlatform)
                 // && fixtureUserDataA == &LVB::BubbleBobbleScene::keyPlatform
@@ -84,7 +84,7 @@ namespace LVB
                 }
             }
 
-            for (int i{ 0 }; i < m_Enemies.size(); ++i)
+            for (std::size_t i{ 0 }; i < m_Enemies.size(); ++i)
             {
                 if (m_Enemies[i] == nullptr)
                     continue;
@@ -116,12 +116,12 @@ namespace LVB
            {
                if (fixtureB->GetFilterData().categoryBits != LVB::BubbleBobbleScene::BUBBLE)
                {
-                   for (int i{ 0 }; i < m_Characters.size(); ++i)
+                   for (std::size_t i{ 0 }; i < m_Characters.size(); ++i)
                    {
                        if (fixtureB == m_Characters[i]->GetBody())
                        {
                            bubble->Hit();
-                           for (int j{ 0 }; j < m_Enemies.size(); ++j)
+                           for (std::size_t j{ 0 }; j < m_Enemies.size(); ++j)
                            {
                                if (m_Enemies[j]->GetState() == Enemy::State::InBubble)
                                    m_Enemies[j]->Kill();
@@ -129,7 +129,7 @@ namespace LVB
                        }
 
                    }
-                   for (int i{ 0 }; i < m_Enemies.size(); ++i)
+                   for (std::size_t i{ 0 }; i < m_Enemies.size(); ++i)
                    {
 
                        if (fixtureB->GetUserData() == m_Enemies[i])
@@ -141,13 +141,13 @@ namespace LVB
                }
                else
                {
-                   for (int i{ 0 }; i < m_Characters.size(); ++i)
+                   for (std::size_t i{ 0 }; i < m_Characters.size(); ++i)
                    {
 
                        if (fixtureA->GetFilterData().categoryBits == m_Characters[i]->GetBody()->GetFilterData().categoryBits)
                        {
                            bubble->Hit();
-                           for (int j{ 0 }; j < m_Enemies.size(); ++j)
+                           for (std::size_t j{ 0 }; j < m_Enemies.size(); ++j)
                            {
                                if (m_Enemies[j] == nullptr)
                                    continue;
@@ -156,7 +156,7 @@ namespace LVB
                            }
                        }
                    }
-                   for (int i{ 0 }; i < m_Enemies.size(); ++i)
+                   for (std::size_t i{ 0 }; i < m_Enemies.size(); ++i)
                    {
                        if (m_Enemies[i] == nullptr)
                            return;
@@ -184,7 +184,7 @@ namespace LVB
         {
             auto fixtureA = contact->GetFixtureA();
             auto fixtureB = contact->GetFixtureB();
-            for (int i{ 0 }; i < m_Enemies.size(); ++i)
+            for (std::size_t i{ 0 }; i < m_Enemies.size(); ++i)
             {
                 if (m_Enemies[i] == nullptr)
                     continue;
@@ -197,11 +197,11 @@ namespace LVB
             auto fixtureA = contact->GetFixtureA();
             auto fixtureB = contact->GetFixtureB();
 
-            for (int i{ 0 }; i < m_Enemies.size(); ++i)
+            for (std::size_t i{ 0 }; i < m_Enemies.size(); ++i)
             {
                 if (m_Enemies[i] == nullptr)
                     continue;
-                for (int j{ 0 }; j < m_Characters.size(); ++j)
+                for (std::size_t j{ 0 }; j < m_Characters.size(); ++j)
                 {
                     if ((fixtureA == m_Enemies[i]->GetRigidBodyFixture() && fixtureB == m_Characters[j]->GetBody()) || (fixtureB == m_Enemies[i]->GetRigidBodyFixture() && fixtureA == m_Characters[j]->GetBody()))
                     {
@@ -229,7 +229,7 @@ namespace LVB
 
             if (fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::PICKUP)
             {
-                for (int i{ 0 }; i < m_Characters.size(); ++i)
+                for (std::size_t i{ 0 }; i < m_Characters.size(); ++i)
                 {
                     if (fixtureB == m_Characters[i]->GetBody())
                         pickUp->PickedUp(m_Characters[i]);
@@ -237,7 +237,7 @@ namespace LVB
             }
             else
             {
-                for (int i{ 0 }; i < m_Characters.size(); ++i)
+                for (std::size_t i{ 0 }; i < m_Characters.size(); ++i)
                 {
                     if (fixtureA == m_Characters[i]->GetBody())
                         pickUp->PickedUp(m_Characters[i]);
@@ -266,7 +266,7 @@ namespace LVB
             {
                 if (fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOULDER)
                 {
-                    for (int i{ 0 }; i < m_Characters.size(); ++i)
+                    for (std::size_t i{ 0 }; i < m_Characters.size(); ++i)
                     {
                         if (fixtureB == m_Characters[i]->GetBody())
                             boulder->Hit(m_Characters[i]);
@@ -274,7 +274,7 @@ namespace LVB
                 }
                 else
                 {
-                    for (int i{ 0 }; i < m_Characters.size(); ++i)
+                    for (std::size_t i{ 0 }; i < m_Characters.size(); ++i)
                     {
                         if (fixtureA == m_Characters[i]->GetBody())
                             boulder->Hit(m_Characters[i]);

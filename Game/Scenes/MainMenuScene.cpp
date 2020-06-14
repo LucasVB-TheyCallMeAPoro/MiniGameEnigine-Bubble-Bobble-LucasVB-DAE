@@ -22,14 +22,14 @@ void MainMenu::Initialize()
 	m_LoadSolo = new Button{ 0,0,std::bind(LoadGame,LVB::BubbleBobbleScene::solo) };
 	m_LoadSolo->SetTexture("SoloButton.png");
 	m_LoadSolo->SetWidthAndHeight(m_LoadSolo->GetTexture()->GetWidth(), m_LoadSolo->GetTexture()->GetHeight());
-	m_LoadSolo->GetTransform()->SetPosition(640 / 2 - m_LoadSolo->GetTexture()->GetWidth() / 2, 480 / 2 -64, 0);
+	m_LoadSolo->GetTransform()->SetPosition(640.f / 2.f - m_LoadSolo->GetTexture()->GetWidth() / 2.f, 480.f / 2.f -64.f, 0.f);
 	AddGameObject(m_LoadSolo);
 
 
 	m_LoadCoop = new Button{ 0,0,std::bind(LoadGame,LVB::BubbleBobbleScene::coop) };
 	m_LoadCoop->SetTexture("CoopButton.png");
 	m_LoadCoop->SetWidthAndHeight(m_LoadCoop->GetTexture()->GetWidth(), m_LoadCoop->GetTexture()->GetHeight());
-	m_LoadCoop->GetTransform()->SetPosition(640 / 2 - m_LoadCoop->GetTexture()->GetWidth()/2, 480 / 2 +64, 0);
+	m_LoadCoop->GetTransform()->SetPosition(640.f / 2.f - m_LoadCoop->GetTexture()->GetWidth()/2.f, 480.f / 2.f +64.f, 0.f);
 	AddGameObject(m_LoadCoop);
 }
 

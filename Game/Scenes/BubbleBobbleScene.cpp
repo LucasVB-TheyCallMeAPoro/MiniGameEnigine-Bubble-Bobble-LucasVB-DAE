@@ -176,7 +176,7 @@ void LVB::BubbleBobbleScene::InitPlayer()
 void LVB::BubbleBobbleScene::LoadNewLevel()
 {
 
-	for (int i{ 0 }; i < m_LevelBodies.size(); ++i)
+	for (std::size_t i{ 0 }; i < m_LevelBodies.size(); ++i)
 	{
 		this->RemoveGameObject(m_LevelObjects[i]);
 		m_PhysicsWorld->DestroyBody(m_LevelBodies[i]);
@@ -184,7 +184,7 @@ void LVB::BubbleBobbleScene::LoadNewLevel()
 	m_LevelBodies.clear();
 	m_LevelObjects.clear();
 	m_LevelNumber++;
-	m_Player1UI->SetLevelNumber(m_LevelNumber);
+	m_Player1UI->SetLevelNumber(static_cast<int>(m_LevelNumber));
 	auto positions = m_Levels[m_LevelNumber].BlockPositions();
 	m_LevelBodies.reserve(100);
 	m_LevelObjects.reserve(100);
@@ -206,14 +206,14 @@ void LVB::BubbleBobbleScene::LoadNewLevel()
 void LVB::BubbleBobbleScene::LoadLevel(const std::vector<glm::ivec2>& positions)
 {
 
-	for (int i{ 0 }; i < positions.size(); ++i)
+	for (std::size_t i{ 0 }; i < positions.size(); ++i)
 	{
 		m_LevelObjects.push_back(new GameObject{});
 		m_LevelObjects.back()->SetTexture("BBsprites/blocks.png");
 		m_LevelObjects.back()->SetSprite({ 0 + (8 * m_LevelNumber),0 }, 8, 8, 10, 10);
-		m_LevelObjects.back()->GetTransform()->SetPosition(positions[i].x * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteWidth(), positions[i].y * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteHeight(), 0);
+		m_LevelObjects.back()->GetTransform()->SetPosition(static_cast<float>(positions[i].x * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteWidth()), static_cast<float>(positions[i].y * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteHeight()), 0.f);
 		b2BodyDef collider;
-		collider.position.Set(positions[i].x * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteWidth(), positions[i].y * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteHeight());
+		collider.position.Set(static_cast<float>(positions[i].x * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteWidth()), static_cast<float>(positions[i].y * m_LevelObjects.back()->GetSprite()->GetSpriteSheet()->GetSpriteHeight()));
 		m_LevelBodies.push_back(m_PhysicsWorld->CreateBody(&collider));
 		b2PolygonShape box;
 		box.SetAsBox(4, 4);
@@ -237,18 +237,18 @@ void LVB::BubbleBobbleScene::LoadLevel(const std::vector<glm::ivec2>& positions)
 void LVB::BubbleBobbleScene::SpawnEnemies()
 {
 	m_Listener->ClearEnemies();
-	//m_NumberOfEnemies = m_LevelNumber + 3;
-	m_NumberOfEnemies = 0;
+	m_NumberOfEnemies = static_cast<int>(m_LevelNumber) + 3;
+	
 	int randomNumOfMaita = 0;
 	int spawnOffset = 40;
-	/*if (m_LevelNumber > 0)
+	if (m_LevelNumber > 0)
 	{
 		
 
 		std::ranlux48 generator;
 		std::uniform_int_distribution<int> distribution(1, m_NumberOfEnemies);
 		randomNumOfMaita = distribution(generator);
-	}*/
+	}
 	glm::vec2 spawnPos{	70,20 };
 	for (int i{ 0 }; i <  randomNumOfMaita; ++i)
 	{

@@ -32,7 +32,7 @@ namespace LVB
 	template<typename ...Args>
 	inline void Notifier<Args...>::Notify(Args ...args) const
 	{
-		for (int i{ 0 }; i < m_Listeners.size(); ++i)
+		for (std::size_t i{ 0 }; i < m_Listeners.size(); ++i)
 		{
 			m_Listeners[i]->OnNotify(args...);
 		}

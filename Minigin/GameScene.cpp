@@ -57,7 +57,7 @@ void LVB::GameScene::RootUpdate(float elapsedSec)
 	static const int clusterSize{16};
 	static const std::size_t threadCount{ 4 };
 	Update(elapsedSec);
-	for (int i{ 0 }; i < m_pToRemove.size(); ++i)
+	for (std::size_t i{ 0 }; i < m_pToRemove.size(); ++i)
 		pRemoveGameObject(m_pToRemove[i]);
 
 	m_pToRemove.clear();
