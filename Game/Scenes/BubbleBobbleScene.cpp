@@ -219,12 +219,23 @@ void LVB::BubbleBobbleScene::SpawnEnemies()
 
 void LVB::BubbleBobbleScene::InitControls()
 {
+	if (m_Type == GameType::solo)
+	{
+		InputManager::GetInstance().BindToKeyboard<JumpCommand>(SDL_SCANCODE_SPACE, m_Player1);
+		InputManager::GetInstance().BindToKeyboard<MoveLeftCommand>(SDL_SCANCODE_LEFT, m_Player1);
+		InputManager::GetInstance().BindToKeyboard<MoveRightCommand>(SDL_SCANCODE_RIGHT, m_Player1);
+		InputManager::GetInstance().BindToKeyboard<FireCommand>(SDL_SCANCODE_A, m_Player1);
+	}
+	else
+	{
+		InputManager::GetInstance().BindToKeyboard<JumpCommand>(SDL_SCANCODE_SPACE, m_Player2);
+		InputManager::GetInstance().BindToKeyboard<MoveLeftCommand>(SDL_SCANCODE_LEFT, m_Player2);
+		InputManager::GetInstance().BindToKeyboard<MoveRightCommand>(SDL_SCANCODE_RIGHT, m_Player2);
+		InputManager::GetInstance().BindToKeyboard<FireCommand>(SDL_SCANCODE_A, m_Player2);
+	}
 	InputManager::GetInstance().BindToController<JumpCommand>(LVB::ControllerButton::ButtonA,m_Player1);
 	InputManager::GetInstance().BindToController<MoveLeftCommand>(LVB::ControllerButton::DPad_Left, m_Player1);
 	InputManager::GetInstance().BindToController<MoveRightCommand>(LVB::ControllerButton::DPad_Right, m_Player1);
 	InputManager::GetInstance().BindToController<FireCommand>(LVB::ControllerButton::ButtonB, m_Player1);
-	InputManager::GetInstance().BindToKeyboard<JumpCommand>(SDL_SCANCODE_SPACE);
-	InputManager::GetInstance().BindToKeyboard<MoveLeftCommand>(SDL_SCANCODE_LEFT);
-	InputManager::GetInstance().BindToKeyboard<MoveRightCommand>(SDL_SCANCODE_RIGHT);
-	InputManager::GetInstance().BindToKeyboard<FireCommand>(SDL_SCANCODE_A);
+
 }

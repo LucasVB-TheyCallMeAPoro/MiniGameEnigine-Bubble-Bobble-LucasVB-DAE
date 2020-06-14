@@ -200,12 +200,17 @@ void Character::Update(float elapsedSec)
 			m_RigidBody->GetFixtureList()->GetNext()->SetFilterData(filter);
 		}
 	}
-	Command* command = InputManager::GetInstance().HandleInput();
-	if (command != nullptr && command->GetGameObject() == this)
+	const std::vector<Command*>& commands = InputManager::GetInstance().HandleInput();
+	bool commandCheck{ false };
+	for (int i{ 0 }; i < commands.size(); ++i)
 	{
-		command->Execute();
+		if (commands[i]->GetGameObject() == this)
+		{
+			commands[i]->Execute();
+			commandCheck = true;
+		}
 	}
-	else
+	if(!commandCheck)
 	{
 		m_RigidBody->SetLinearVelocity({ 0,m_RigidBody->GetLinearVelocity().y });
 	}

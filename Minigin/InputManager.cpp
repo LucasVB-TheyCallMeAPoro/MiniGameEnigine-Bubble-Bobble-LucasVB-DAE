@@ -32,23 +32,24 @@ bool LVB::InputManager::ProcessInput()
 	return true;
 }
 
-LVB::Command* LVB::InputManager::HandleInput() const
+const std::vector<LVB::Command*>& LVB::InputManager::HandleInput() const
 {
-
+	static std::vector<Command*> commands;
+	commands.clear();
 	if (m_ControllerCheck)
 	{
 		for (const auto& button : m_ControllerControls)
 		{
 			if (m_CurrentState.Gamepad.wButtons & static_cast<WORD>(button.first))
-				return button.second;
+				commands.push_back(button.second);
 		}
 	}
 	for (const auto& key : m_KeyboardControls)
 	{
 		if (m_CurrentKeyState[key.first])
-			return key.second;
+			commands.push_back(key.second);
 	}
-	return nullptr;
+	return commands;
 }
 
 void LVB::InputManager::BindToKeyboard(SDL_Scancode key, Command* c)

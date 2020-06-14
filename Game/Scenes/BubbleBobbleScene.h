@@ -52,6 +52,7 @@ namespace LVB
 		UI* m_Player1UI;
 		UI* m_Player2UI;
 		Character* m_Player1;
+		Character* m_Player2;
 		std::size_t m_LevelNumber;
 		std::vector<Level> m_Levels;
 		int m_NumberOfEnemies;

@@ -32,7 +32,7 @@ namespace LVB
 			keyHold = 4,
 		};
 		bool ProcessInput();
-		Command* HandleInput() const;
+		const std::vector<Command*>& HandleInput() const;
 
 		Command* UnbindKeyboard(SDL_Scancode);
 		Command* UnbindController(ControllerButton);
