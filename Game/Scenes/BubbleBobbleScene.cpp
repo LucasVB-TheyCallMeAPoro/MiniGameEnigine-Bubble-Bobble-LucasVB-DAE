@@ -67,6 +67,7 @@ void LVB::BubbleBobbleScene::Initialize()
 	InitLevel();
 	InitPlayer();
 	SpawnEnemies();
+	InitControls();
 	m_PhysicsWorld->SetContactListener(m_Listener);
 }
 
@@ -116,7 +117,7 @@ void LVB::BubbleBobbleScene::InitLevel()
 
 void LVB::BubbleBobbleScene::InitPlayer()
 {
-	m_Player1 = new Character{Character::Player::Player1, Character::Type::bob,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE };
+	m_Player1 = new Character{Character::Player::Player1, Character::Type::bob,8,2,16 ,m_PhysicsWorld,{32,170},this,BubbleBobbleScene::CHARACTER, BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY | BubbleBobbleScene::BUBBLE | BubbleBobbleScene::PICKUP };
 	this->AddGameObject(m_Player1);
 	m_Listener->AddCharacter(m_Player1);
 	m_Player1UI = new UI{ m_Player1,UI::ScreenPos::player1,this };

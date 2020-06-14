@@ -67,7 +67,10 @@ private:
 	int m_Score = 0;
 	int m_ColumnCount;
 
-
+	//Combat
+	float m_HitTimer = 0.f;
+	float m_SaveTime = 1.f;
+	bool m_Hit = false;
 	glm::vec2 m_SpawnPosition;
 	std::string* m_SensorName;
 	//Movement

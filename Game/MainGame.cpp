@@ -3,8 +3,6 @@
 #include "Minigin.h"
 #include <SceneManager.h>
 #include "Scenes/DemoScene.h"
-#include "Scenes/CommandAssignmentScene.h"
-#include "Scenes/BubbleBobbleScene.h"
 #include "Scenes/VictorySCENE.h"
 #include "Scenes/LoseScene.h"
 #include "Scenes/MainMenuScene.h"

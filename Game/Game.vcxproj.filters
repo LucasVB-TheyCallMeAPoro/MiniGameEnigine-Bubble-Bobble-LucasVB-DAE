@@ -21,9 +21,6 @@
     <ClCompile Include="Scenes\DemoScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\CommandAssignmentScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Commands\GameCommands.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,12 +54,12 @@
     <ClCompile Include="GameBase\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameBase\Pickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scenes\DemoScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\CommandAssignmentScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Commands\GameCommands.h">
@@ -99,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameBase\Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBase\Pickup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

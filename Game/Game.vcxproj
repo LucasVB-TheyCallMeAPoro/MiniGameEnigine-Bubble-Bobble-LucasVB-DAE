@@ -156,10 +156,10 @@
     <ClCompile Include="GameBase\Character.cpp" />
     <ClCompile Include="GameBase\Enemies.cpp" />
     <ClCompile Include="GameBase\Level.cpp" />
+    <ClCompile Include="GameBase\Pickup.cpp" />
     <ClCompile Include="GameBase\UI.cpp" />
     <ClCompile Include="Scenes\BubbleBobbleScene.cpp" />
     <ClCompile Include="Commands\GameCommands.cpp" />
-    <ClCompile Include="Scenes\CommandAssignmentScene.cpp" />
     <ClCompile Include="Scenes\DemoScene.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Scenes\LoseScene.cpp" />
@@ -172,11 +172,11 @@
     <ClInclude Include="GameBase\Character.h" />
     <ClInclude Include="GameBase\ContactListener.h" />
     <ClInclude Include="GameBase\Level.h" />
+    <ClInclude Include="GameBase\Pickup.h" />
     <ClInclude Include="GameBase\UI.h" />
     <ClInclude Include="GameBase\Enemies.h" />
     <ClInclude Include="Scenes\BubbleBobbleScene.h" />
     <ClInclude Include="Commands\GameCommands.h" />
-    <ClInclude Include="Scenes\CommandAssignmentScene.h" />
     <ClInclude Include="Scenes\DemoScene.h" />
     <ClInclude Include="Scenes\LoseScene.h" />
     <ClInclude Include="Scenes\MainMenuScene.h" />

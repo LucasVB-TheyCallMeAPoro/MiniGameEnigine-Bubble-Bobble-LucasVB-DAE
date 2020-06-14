@@ -145,8 +145,13 @@ void Character::MoveRight()
 
 void Character::TakeDamage()
 {
-	m_Health -= 1;
-	m_OnChangeHealth.Notify(m_Health);
+	if (!m_Hit)
+	{
+		m_Health -= 1;
+		m_OnChangeHealth.Notify(m_Health);
+		m_Hit = true;
+	}
+
 }
 
 void Character::AddScore(int amount)
@@ -198,6 +203,15 @@ void Character::Update(float elapsedSec)
 			filter.maskBits = BubbleBobbleScene::BOUNDARY | BubbleBobbleScene::PLATFORM | BubbleBobbleScene::ENEMY;
 
 			m_RigidBody->GetFixtureList()->GetNext()->SetFilterData(filter);
+		}
+	}
+	if (m_Hit)
+	{
+		m_HitTimer += elapsedSec;
+		if (m_HitTimer >= m_SaveTime)
+		{
+			m_Hit = false;
+			m_HitTimer = 0;
 		}
 	}
 	const std::vector<Command*>& commands = InputManager::GetInstance().HandleInput();

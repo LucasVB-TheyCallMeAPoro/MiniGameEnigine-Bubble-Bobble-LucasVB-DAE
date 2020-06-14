@@ -2,6 +2,7 @@
 #include "Box2D.h"
 #include "Character.h"
 #include "Bubble.h"
+#include "Pickup.h"
 #include "Enemies.h"
 #include <string>
 #include <cstring>
@@ -19,6 +20,8 @@ namespace LVB
             IsGrounded(contact);
             BubbleOverlap(contact);
             EnemyHitWall(contact);
+            EnemyHitPlayer(contact);
+            PlayerHitPickUp(contact);
         }
 
         void EndContact(b2Contact* contact) {
@@ -161,14 +164,64 @@ namespace LVB
         {
             auto fixtureA = contact->GetFixtureA();
             auto fixtureB = contact->GetFixtureB();
-            void* fixtureUserDataA = fixtureA->GetUserData();
-            void* fixtureUserDataB = fixtureB->GetUserData();
             for (int i{ 0 }; i < m_Enemies.size(); ++i)
             {
                 if (m_Enemies[i] == nullptr)
                     continue;
                 if ((fixtureA == m_Enemies[i]->GetRigidBodyFixture() && fixtureB->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOUNDARY) || (fixtureB == m_Enemies[i]->GetRigidBodyFixture() && fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOUNDARY))
                     m_Enemies[i]->HitWall();
+            }
+        }
+        void EnemyHitPlayer(b2Contact* contact)
+        {
+            auto fixtureA = contact->GetFixtureA();
+            auto fixtureB = contact->GetFixtureB();
+
+            for (int i{ 0 }; i < m_Enemies.size(); ++i)
+            {
+                if (m_Enemies[i] == nullptr)
+                    continue;
+                for (int j{ 0 }; j < m_Characters.size(); ++j)
+                {
+                    if ((fixtureA == m_Enemies[i]->GetRigidBodyFixture() && fixtureB == m_Characters[j]->GetBody()) || (fixtureB == m_Enemies[i]->GetRigidBodyFixture() && fixtureA == m_Characters[j]->GetBody()))
+                    {
+                        m_Characters[j]->TakeDamage();
+                    }
+                }
+            }
+        }
+        void PlayerHitPickUp(b2Contact* contact)
+        {
+            auto fixtureA = contact->GetFixtureA();
+            auto fixtureB = contact->GetFixtureB();
+
+            if (fixtureA->GetFilterData().categoryBits != LVB::BubbleBobbleScene::PICKUP && fixtureB->GetFilterData().categoryBits != LVB::BubbleBobbleScene::PICKUP)
+                return;
+
+            PickUp* pickUp{};
+            if (fixtureA->GetFilterData().categoryBits != LVB::BubbleBobbleScene::PICKUP)
+                pickUp = reinterpret_cast<PickUp*>(fixtureB->GetBody()->GetUserData());
+            else
+                pickUp = reinterpret_cast<PickUp*>(fixtureA->GetBody()->GetUserData());
+
+            if (pickUp == nullptr)
+                return;
+
+            if (fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::PICKUP)
+            {
+                for (int i{ 0 }; i < m_Characters.size(); ++i)
+                {
+                    if (fixtureB == m_Characters[i]->GetBody())
+                        pickUp->PickedUp(m_Characters[i]);
+                }
+            }
+            else
+            {
+                for (int i{ 0 }; i < m_Characters.size(); ++i)
+                {
+                    if (fixtureA == m_Characters[i]->GetBody())
+                        pickUp->PickedUp(m_Characters[i]);
+                }
             }
         }
 	};

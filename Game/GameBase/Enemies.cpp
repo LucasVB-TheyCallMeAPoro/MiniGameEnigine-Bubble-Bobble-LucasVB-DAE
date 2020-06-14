@@ -7,6 +7,7 @@
 #include "GameScene.h"
 #include "../Scenes/BubbleBobbleScene.h"
 #include "ContactListener.h"
+#include "Pickup.h"
 Enemy::Enemy(int id,State state,Type type, glm::vec2 spawnPos, int columnCount, int rowCount, int TotalRowCount, LVB::GameScene* scene, b2World* world, unsigned short categoryMask, unsigned short maskBits)
 	:m_Type{type}
 	, m_PhysicsWorld{world}
@@ -216,6 +217,19 @@ void Enemy::UpdateSprite(float elapsedSec)
 
 void Enemy::Destroy()
 {
+	PickUp* p{};
+	switch (m_Type)
+	{
+	case Enemy::ZenChan:
+	{
+		p = new PickUp{ m_PhysicsWorld, glm::vec2{ this->GetTransform()->GetPosition().x,this->GetTransform()->GetPosition().y }, m_Scene,PickUp::Type::melon };
+	}
+		break;
+	case Enemy::Maita:
+		p = new PickUp{ m_PhysicsWorld, glm::vec2{ this->GetTransform()->GetPosition().x,this->GetTransform()->GetPosition().y }, m_Scene,PickUp::Type::fries };
+		break;
+	}
+	m_Scene->AddGameObject(p);
 	auto s = reinterpret_cast<LVB::BubbleBobbleScene*>(m_Scene);
 	s->GetListener()->RemoveEnemy(this);
 	s->EnemyKilled();

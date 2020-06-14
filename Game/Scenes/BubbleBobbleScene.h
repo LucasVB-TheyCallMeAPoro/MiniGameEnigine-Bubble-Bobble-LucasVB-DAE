@@ -21,7 +21,8 @@ namespace LVB
 			PLATFORM = 0x0002,
 			CHARACTER = 0x0004,
 			ENEMY = 0x0008,
-			BUBBLE = 0x0010,
+			BUBBLE = 0x000a,
+			PICKUP = 0x000c
 		};
 		enum GameType
 		{
