@@ -237,18 +237,19 @@ void LVB::BubbleBobbleScene::LoadLevel(const std::vector<glm::ivec2>& positions)
 void LVB::BubbleBobbleScene::SpawnEnemies()
 {
 	m_Listener->ClearEnemies();
-	m_NumberOfEnemies = m_LevelNumber + 3;
+	//m_NumberOfEnemies = m_LevelNumber + 3;
+	m_NumberOfEnemies = 0;
 	int randomNumOfMaita = 0;
-	int spawnOffset = 30;
-	if (m_LevelNumber > 0)
+	int spawnOffset = 40;
+	/*if (m_LevelNumber > 0)
 	{
 		
 
 		std::ranlux48 generator;
 		std::uniform_int_distribution<int> distribution(1, m_NumberOfEnemies);
 		randomNumOfMaita = distribution(generator);
-	}
-	glm::vec2 spawnPos{	80,20 };
+	}*/
+	glm::vec2 spawnPos{	70,20 };
 	for (int i{ 0 }; i <  randomNumOfMaita; ++i)
 	{
 		auto state = Enemy::State::MoveLeft;

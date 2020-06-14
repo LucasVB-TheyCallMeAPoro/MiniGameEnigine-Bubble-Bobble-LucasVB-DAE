@@ -12,6 +12,7 @@
 #include "Bubble.h"
 #include "GameScene.h"
 #include "../Scenes/BubbleBobbleScene.h"
+#include "Boulder.h"
 Character::Character(Player p,Character::Type type, int columnCount, int rowCount, int totalRowCount, b2World* world, const glm::vec2& spawnPos, LVB::GameScene* scene, unsigned short categoryMask, unsigned short maskBits)
 	:m_Type{type}
 	,m_AnimTime{0.f}
@@ -88,22 +89,32 @@ void Character::Shoot()
 	if (m_Shot)
 		return; 
 
-	glm::vec2 spawnOffset{ 30,8 };
-	switch (m_State)
+	switch (m_Type)
 	{
-	case Character::moveLeft:
+	case Character::Maita:
+		break;
+	default:
 	{
-		Bubble* bubble = new Bubble{ m_PhysicsWorld, {this->GetTransform()->GetPosition().x - spawnOffset.x, this->GetTransform()->GetPosition().y + spawnOffset.y},m_Scene };
-		m_Scene->AddGameObject(bubble);
+		glm::vec2 spawnOffset{ 30,8 };
+		switch (m_State)
+		{
+		case Character::moveLeft:
+		{
+			Bubble* bubble = new Bubble{ m_PhysicsWorld, {this->GetTransform()->GetPosition().x - spawnOffset.x, this->GetTransform()->GetPosition().y + spawnOffset.y},m_Scene };
+			m_Scene->AddGameObject(bubble);
+		}
+		break;
+		case Character::moveRight:
+		{
+			Bubble* bubble = new Bubble{ m_PhysicsWorld, {this->GetTransform()->GetPosition().x + spawnOffset.x, this->GetTransform()->GetPosition().y + spawnOffset.y}, m_Scene };
+			m_Scene->AddGameObject(bubble);
+		}
+		break;
+		}
 	}
-	break;
-	case Character::moveRight:
-	{
-		Bubble* bubble = new Bubble{ m_PhysicsWorld, {this->GetTransform()->GetPosition().x + spawnOffset.x, this->GetTransform()->GetPosition().y + spawnOffset.y}, m_Scene };
-		m_Scene->AddGameObject(bubble);
+		break;
 	}
-	break;
-	}
+	
 	m_Shot = true;
 
 }
@@ -182,6 +193,15 @@ void Character::DecrementFootCount()
 	if (m_FootContactCount - 1 < 0)
 		m_FootContactCount = 0;
 	m_FootContactCount--;
+}
+
+void Character::HitByBubble(const glm::vec3& pos, float yspeed, float time)
+{
+	m_State = State::bubble;
+	m_HitBubble = true;
+	m_BubblePos = { pos.x,pos.y };
+	m_UpwardsSpeed = yspeed;
+	m_FloatingDuration = time;
 }
 
 void Character::Render() const

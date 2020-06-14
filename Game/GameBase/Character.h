@@ -24,7 +24,7 @@ public:
 	{
 		moveLeft,
 		moveRight,
-		dead
+		bubble
 	};
 
 	enum Player
@@ -53,6 +53,7 @@ public:
 	void DecrementFootCount();
 	int GetHealth() const {return m_Health;}
 	bool IsGrounded() { return !m_Jumped; }
+	void HitByBubble(const glm::vec3& pos, float yspeed, float time);
 protected:
 	virtual void Render() const override;
 	virtual void Update(float elapsedSec) override;
@@ -85,7 +86,12 @@ private:
 	float m_BubbleCooldown = 1.f;
 	float m_BubbleCooldownTimer = 0.f;
 	bool m_Shot;
-
+	//vs
+	float m_UpwardsSpeed;
+	glm::vec2 m_BubblePos;
+	bool m_HitBubble;
+	float m_FloatingDuration = 0;
+	float m_FloatTimer = 0;
 	void SpawnAtTop();
 };
 

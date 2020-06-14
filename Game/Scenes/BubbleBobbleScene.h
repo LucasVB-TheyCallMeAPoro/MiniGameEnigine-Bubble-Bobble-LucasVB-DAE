@@ -41,6 +41,9 @@ namespace LVB
 		void EnemyKilled() { m_NumberOfEnemies--; }
 
 		ContactListener* GetListener() const;
+		GameType GetType() const { return m_Type; }
+		Character* GetPlayer1() const { return m_Player1; }
+		Character* GetPlayer2() const { return m_Player2; }
 	protected:
 		void Initialize() override;
 		void Update(float elapsedSec) override;

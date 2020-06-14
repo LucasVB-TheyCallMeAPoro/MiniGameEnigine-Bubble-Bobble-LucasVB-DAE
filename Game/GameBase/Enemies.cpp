@@ -8,6 +8,8 @@
 #include "../Scenes/BubbleBobbleScene.h"
 #include "ContactListener.h"
 #include "Pickup.h"
+#include "Boulder.h"
+
 Enemy::Enemy(int id,State state,Type type, glm::vec2 spawnPos, int columnCount, int rowCount, int TotalRowCount, LVB::GameScene* scene, b2World* world, unsigned short categoryMask, unsigned short maskBits)
 	:m_Type{type}
 	, m_PhysicsWorld{world}
@@ -16,8 +18,7 @@ Enemy::Enemy(int id,State state,Type type, glm::vec2 spawnPos, int columnCount, 
 	,m_JumpForce{-70}
 	,m_MoveSpeed{30}
 	,m_State{state}
-	,m_BubblePos{0,0}
-	,m_Hit{false}
+, m_PrevState{ state }
 {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
@@ -72,6 +73,9 @@ void Enemy::HitWall()
 	if (m_State == State::MoveRight)
 		m_State = State::MoveLeft;
 
+	if(m_State == State::Attacking)
+		 m_State = State::MoveLeft;
+
 }
 
 
@@ -97,18 +101,21 @@ void Enemy::DecrementFootCount()
 	m_FootContactCount--;
 }
 
-void Enemy::HitByBubble(const glm::vec3& pos,float yspeed,float time)
+void Enemy::HitByBubble()
 {
 	m_State = State::InBubble;
-	m_Hit = true;
-	m_BubblePos = { pos.x,pos.y };
-	m_UpwardsSpeed = yspeed;
-	m_FloatingDuration = time;
 }
 
 void Enemy::Kill()
 {
 	m_State = State::Dead;
+}
+
+void Enemy::BubbleExpire()
+{
+	m_State = State::MoveLeft;
+	m_RigidBody->SetEnabled(true);
+	m_RigidBody->SetTransform({ this->GetTransform()->GetPosition().x,this->GetTransform()->GetPosition().y }, 0);
 }
 
 
@@ -125,7 +132,14 @@ void Enemy::Update(float elapsedSec)
 		Destroy();
 		return;
 	}
-		
+
+	if (m_State == State::InBubble)
+	{
+		m_RigidBody->SetEnabled(false);
+	}
+	else
+		CheckSeePlayers();
+
 	if (m_FootContactCount > 0)
 	{
 		switch (m_State)
@@ -142,39 +156,18 @@ void Enemy::Update(float elapsedSec)
 		default:
 			break;
 		}
-		
+
 	}
 
-	if (m_State == State::InBubble)
-	{
-		m_RigidBody->SetEnabled(false);
-		if (m_Hit)
-		{
-			b2Vec2 pos{};
-			pos.x = m_BubblePos.x;
-			pos.y = m_BubblePos.y;
-			this->GetTransform()->SetPosition(pos.x, pos.y, 0);
-		}
-		m_RigidBody->SetLinearVelocity({ 0,m_UpwardsSpeed });
-		this->GetTransform()->SetPosition(this->GetTransform()->GetPosition().x, this->GetTransform()->GetPosition().y + m_UpwardsSpeed * elapsedSec, 0);
-		m_Hit = false;
-		m_FloatTimer += elapsedSec;
-		if (m_FloatTimer >= m_FloatingDuration)
-		{
-			m_State = State::MoveLeft;
-			m_RigidBody->SetEnabled(true);
-			m_RigidBody->SetTransform({ this->GetTransform()->GetPosition().x,this->GetTransform()->GetPosition().y }, 0);
-			m_FloatTimer = 0;
-		}
-	}
-	else
+	if(m_State != State::InBubble)
 	{
 		auto rigPos = m_RigidBody->GetTransform();
 		this->GetTransform()->SetPosition(rigPos.p.x, rigPos.p.y, 0);
 	}
 	m_SwapTimer += elapsedSec;
 
-	m_PreviousCounter = m_HitWallCounter;
+	if(m_State != State::Attacking || m_State != State::InBubble)
+		m_PrevState = m_State;
 	UpdateSprite(elapsedSec);
 }
 
@@ -192,6 +185,48 @@ void Enemy::MoveRightBehavior(float elapsedSec)
 
 void Enemy::AttackBehavior(float elapsedSec)
 {
+	switch (m_Type)
+	{
+	case Enemy::ZenChan:
+		if (m_PrevState == State::MoveLeft)
+			m_RigidBody->SetLinearVelocity({ -m_MoveSpeed * 3,0 });
+		else
+			m_RigidBody->SetLinearVelocity({ m_MoveSpeed * 3,0 });
+
+		m_AttackTimer += elapsedSec;
+		if (m_AttackTime >= m_AnimTime)
+		{
+			m_AttackTimer = 0;
+			m_State = m_PrevState;
+		}
+		break;
+	case Enemy::Maita:
+		if (m_PrevState == State::MoveLeft)
+		{
+			m_AttackTimer += elapsedSec;
+			if (m_AttackTime >= m_AnimTime)
+			{
+				m_AttackTimer = 0;
+				return;
+			}
+			Boulder* b = new Boulder(m_PhysicsWorld, { m_RigidBody->GetTransform().p.x,m_RigidBody->GetTransform().p.y }, m_Scene, m_MoveSpeed * 2);
+			m_Scene->AddGameObject(b);
+			m_State = m_PrevState;
+		}
+		else
+		{
+			m_AttackTimer += elapsedSec;
+			if (m_AttackTime >= m_AnimTime)
+			{
+				m_AttackTimer = 0;
+				return;
+			}
+			Boulder* b = new Boulder(m_PhysicsWorld, { m_RigidBody->GetTransform().p.x,m_RigidBody->GetTransform().p.y }, m_Scene, -m_MoveSpeed * 2);
+			m_Scene->AddGameObject(b);
+			m_State = m_PrevState;
+		}
+		break;
+	}	
 }
 
 void Enemy::UpdateSprite(float elapsedSec)
@@ -202,7 +237,7 @@ void Enemy::UpdateSprite(float elapsedSec)
 		m_AnimTime = 0;
 
 		int idx = (this->GetSprite()->GetIndex() + 1) % 8;
-		switch (m_State)
+		switch (m_PrevState)
 		{
 		case Enemy::State::MoveRight:
 			this->GetSprite()->SetIndex(idx);
@@ -235,4 +270,36 @@ void Enemy::Destroy()
 	s->EnemyKilled();
 	m_PhysicsWorld->DestroyBody(m_RigidBody);
 	m_Scene->RemoveGameObject(this);
+}
+
+void Enemy::CheckSeePlayers()
+{
+	b2RayCastInput ray{};
+	ray.p1 = m_RigidBody->GetTransform().p;
+	ray.p2 = ray.p1;
+	if (m_PrevState == State::MoveLeft)
+		ray.p2.x -= 1;
+	else
+		ray.p2.x += 1;
+
+	ray.maxFraction = m_ViewRange;
+
+	b2RayCastOutput output{};
+
+	auto s = reinterpret_cast<LVB::BubbleBobbleScene*>(m_Scene);
+
+	switch (s->GetType())
+	{
+	case LVB::BubbleBobbleScene::GameType::solo:
+		if (s->GetPlayer1()->GetBody()->RayCast(&output, ray, 0))
+			m_State = State::Attacking;
+		break;
+	case LVB::BubbleBobbleScene::GameType::coop:
+		if (s->GetPlayer1()->GetBody()->RayCast(&output, ray, 0))
+			m_State = State::Attacking;
+		if(s->GetPlayer2()->GetBody()->RayCast(&output, ray, 0))
+			m_State = State::Attacking;
+		break;
+	}	
+	
 }

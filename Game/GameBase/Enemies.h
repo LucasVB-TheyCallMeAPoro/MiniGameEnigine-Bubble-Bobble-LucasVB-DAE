@@ -33,9 +33,9 @@ public:
 	void IncrementFootCount();
 	void DecrementFootCount();
 
-	void HitByBubble(const glm::vec3& pos, float yspeed, float time);
+	void HitByBubble();
 	void Kill();
-
+	void BubbleExpire();
 	Enemy::State GetState() const { return m_State; }
 private:
 	float m_AnimTime;
@@ -52,15 +52,13 @@ private:
 	float m_SwapTime = 1.f;
 	float m_SwapTimer = 1.f;
 
-	//IF IN BUBBLE
-	float m_UpwardsSpeed;
-	glm::vec2 m_BubblePos;
-	bool m_Hit;
-	float m_FloatingDuration = 0;
-	float m_FloatTimer = 0;
-	//Behavior
-	int m_HitWallCounter = 0;
-	int m_PreviousCounter = 0;
+
+	//attack
+	State m_PrevState;
+	float m_ViewRange = 150;
+
+	float m_AttackTime = 2.f;
+	float m_AttackTimer = 0.f;
 protected:
 	virtual void Render() const override;
 	virtual void Update(float elapsedSec) override;
@@ -72,4 +70,5 @@ private:
 	void AttackBehavior(float elapsedSec);
 	void UpdateSprite(float elapsedSec);
 	void Destroy();
+	void CheckSeePlayers();
 };

@@ -49,12 +49,18 @@ void LVB::GameScene::RootRender() const
 }
 void LVB::GameScene::RootUpdate(float elapsedSec)
 {
+
+
 	//Amount of gameobject per thread (except for the last thread)
 	//If you multiply the size of a x86 pointer (4bytes) with 16 you get 64bytes which is the normal size of a cache line
 	//this is a fix for false sharing (see photo in resources)
 	static const int clusterSize{16};
 	static const std::size_t threadCount{ 4 };
 	Update(elapsedSec);
+	for (int i{ 0 }; i < m_pToRemove.size(); ++i)
+		pRemoveGameObject(m_pToRemove[i]);
+
+	m_pToRemove.clear();
 	//Making 4 threads
 	std::vector<std::future<void>> futures;
 	futures.reserve(threadCount);
@@ -89,10 +95,7 @@ void LVB::GameScene::RootUpdate(float elapsedSec)
 		fut.get();
 	}
 
-	for (int i{ 0 }; i < m_pToRemove.size(); ++i)
-		pRemoveGameObject(m_pToRemove[i]);
 
-	m_pToRemove.clear();
 }
 
 void LVB::GameScene::UpdateGameObjects(GameScene* scene,float elapsedSec, std::size_t begin, std::size_t end)

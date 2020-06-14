@@ -12,11 +12,11 @@
 //https://www.iforce2d.net/b2dtut/collision-filtering
 namespace LVB
 {
-	class ContactListener : public b2ContactListener
-	{
+    class ContactListener : public b2ContactListener
+    {
     public:
         void BeginContact(b2Contact* contact) {
-           
+
 
             IsGrounded(contact);
             BubbleOverlap(contact);
@@ -28,8 +28,8 @@ namespace LVB
 
         void EndContact(b2Contact* contact) {
             //check if fixture A was the foot sensor
-           auto fixtureUserDataA = contact->GetFixtureA();
-           auto fixtureUserDataB = contact->GetFixtureB();
+            auto fixtureUserDataA = contact->GetFixtureA();
+            auto fixtureUserDataB = contact->GetFixtureB();
             for (int i{ 0 }; i < m_Characters.size(); ++i)
             {
                 if (fixtureUserDataA == m_Characters[i]->GetFootSensor() || fixtureUserDataB == m_Characters[i]->GetFootSensor())
@@ -42,30 +42,31 @@ namespace LVB
             {
                 if (m_Enemies[i] == nullptr)
                     continue;
-               
+
                 if (fixtureUserDataA == m_Enemies[i]->GetFootSensor() || fixtureUserDataB == m_Enemies[i]->GetFootSensor())
                 {
                     m_Enemies[i]->DecrementFootCount();
                 }
-    
+
             }
 
 
         }
-         void AddCharacter(Character * character) { m_Characters.push_back(character); }
-        
-         void AddEnemy(Enemy* e) { m_Enemies.push_back(e); }
-         void RemoveEnemy(Enemy* e)
-         {
-            
-             auto it = std::find(m_Enemies.begin(), m_Enemies.end(), e);
-             *it = nullptr;
-         }
-         void ClearEnemies() { m_Enemies.clear(); }
-         
+        void AddCharacter(Character* character) { m_Characters.push_back(character); }
+
+        void AddEnemy(Enemy* e) { m_Enemies.push_back(e); }
+        void RemoveEnemy(Enemy* e)
+        {
+
+            auto it = std::find(m_Enemies.begin(), m_Enemies.end(), e);
+            *it = nullptr;
+        }
+        void ClearEnemies() { m_Enemies.clear(); }
+        void SetGameType(LVB::BubbleBobbleScene::GameType t) { m_GameType = t; }
     private:
         std::vector<Character*> m_Characters;
         std::vector<Enemy*> m_Enemies;
+        LVB::BubbleBobbleScene::GameType m_GameType;
         void IsGrounded(b2Contact* contact)
         {
             //Check if grounded code
@@ -110,7 +111,8 @@ namespace LVB
             
            if (bubble == nullptr)
                return;
-           else
+            
+           if (m_GameType != LVB::BubbleBobbleScene::GameType::vs)
            {
                if (fixtureB->GetFilterData().categoryBits != LVB::BubbleBobbleScene::BUBBLE)
                {
@@ -125,17 +127,17 @@ namespace LVB
                                    m_Enemies[j]->Kill();
                            }
                        }
-                           
+
                    }
                    for (int i{ 0 }; i < m_Enemies.size(); ++i)
                    {
 
                        if (fixtureB->GetUserData() == m_Enemies[i])
-                           m_Enemies[i]->HitByBubble(bubble->GetTransform()->GetPosition(), bubble->GetSpeed(), bubble->GetLifeTime() - bubble->GetTimer());
+                           m_Enemies[i]->HitByBubble();
 
                    }
 
-                   
+
                }
                else
                {
@@ -147,6 +149,8 @@ namespace LVB
                            bubble->Hit();
                            for (int j{ 0 }; j < m_Enemies.size(); ++j)
                            {
+                               if (m_Enemies[j] == nullptr)
+                                   continue;
                                if (m_Enemies[j]->GetState() == Enemy::State::InBubble)
                                    m_Enemies[j]->Kill();
                            }
@@ -154,14 +158,28 @@ namespace LVB
                    }
                    for (int i{ 0 }; i < m_Enemies.size(); ++i)
                    {
-                      
+                       if (m_Enemies[i] == nullptr)
+                           return;
+                       if (bubble->HasEnemy())
+                           return;
                        if (fixtureA->GetUserData() == m_Enemies[i])
-                           m_Enemies[i]->HitByBubble(bubble->GetTransform()->GetPosition(), bubble->GetSpeed(),bubble->GetLifeTime() - bubble->GetTimer());
+                       {
+                           m_Enemies[i]->HitByBubble();
+                           bubble->GotEnemy(m_Enemies[i]);
+                           return;
+
+                       }
+                           
 
                    }
                }
            }
-        }
+           else
+           {
+
+           }
+         }
+        
         void EnemyHitWall(b2Contact* contact) 
         {
             auto fixtureA = contact->GetFixtureA();
@@ -243,22 +261,41 @@ namespace LVB
             if (boulder == nullptr)
                 return;
 
-            if (fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOULDER)
+
+            if (m_GameType != LVB::BubbleBobbleScene::GameType::vs)
             {
-                for (int i{ 0 }; i < m_Characters.size(); ++i)
+                if (fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOULDER)
                 {
-                    if (fixtureB == m_Characters[i]->GetBody())
-                        boulder->Hit(m_Characters[i]);
+                    for (int i{ 0 }; i < m_Characters.size(); ++i)
+                    {
+                        if (fixtureB == m_Characters[i]->GetBody())
+                            boulder->Hit(m_Characters[i]);
+                    }
+                }
+                else
+                {
+                    for (int i{ 0 }; i < m_Characters.size(); ++i)
+                    {
+                        if (fixtureA == m_Characters[i]->GetBody())
+                            boulder->Hit(m_Characters[i]);
+                    }
                 }
             }
             else
             {
-                for (int i{ 0 }; i < m_Characters.size(); ++i)
+                if (fixtureA->GetFilterData().categoryBits == LVB::BubbleBobbleScene::BOULDER)
                 {
-                    if (fixtureA == m_Characters[i]->GetBody())
-                        boulder->Hit(m_Characters[i]);
+                    if (fixtureB == m_Characters[0]->GetBody())
+                        boulder->Hit(m_Characters[0]);
+
+                }
+                else
+                {
+                    if (fixtureA == m_Characters[0]->GetBody())
+                        boulder->Hit(m_Characters[0]);
                 }
             }
+           
         }
 	};
 }

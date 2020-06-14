@@ -10,6 +10,7 @@ Bubble::Bubble(b2World* world, const glm::vec2& spawnPos, LVB::GameScene* scene)
 	,m_RigidBody{nullptr}
 	,m_World{world}
 	,m_Scene{scene}
+	,m_Enemy{nullptr}
 {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
@@ -41,23 +42,44 @@ void Bubble::Destroy()
 {
 	m_World->DestroyBody(m_RigidBody);
 	m_Scene->RemoveGameObject(this);
-	
-}
 
+}
+bool Bubble::HasEnemy() const
+{
+	
+	return m_Enemy != nullptr;
+}
+void Bubble::GotEnemy(GameObject* e)
+{
+	m_Enemy = e;
+}
 void Bubble::Render() const
 {
 }
 
 void Bubble::Update(float elapsedSec)
 {
+	if (m_IsHit == true)
+	{
+		Destroy();
+		return;
+	}
 	m_RigidBody->SetLinearVelocity({ 0,m_RiseForce });
 	auto rigPos = m_RigidBody->GetTransform();
 	this->GetTransform()->SetPosition(rigPos.p.x, rigPos.p.y, 0);
+
+
+	if (m_Enemy != nullptr)
+	{
+		m_Enemy->GetTransform()->SetPosition(rigPos.p.x, rigPos.p.y,0);
+	}
 	m_Timer += elapsedSec;
 
 	if (m_Timer >= m_LifeTime || m_IsHit)
 	{
 		Destroy();
+		if (m_Enemy != nullptr)
+			reinterpret_cast<Enemy*>(m_Enemy)->BubbleExpire();
 		return;
 	}
 

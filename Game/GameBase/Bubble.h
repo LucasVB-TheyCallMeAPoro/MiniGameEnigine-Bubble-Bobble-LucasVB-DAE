@@ -18,6 +18,10 @@ public:
 
 	float GetLifeTime() const { return m_LifeTime; }
 	float GetTimer() const { return m_Timer; }
+	
+	bool HasEnemy() const;
+	void GotEnemy(GameObject * e);
+
 protected:
 	virtual void Render() const override;
 	virtual void Update(float elapsedSec) override;
@@ -30,5 +34,9 @@ private:
 	float m_AnimTime = 0;
 	float m_RiseForce = -20;
 	bool m_IsHit = false;
+	bool m_EnemyIn = false;
+
+	GameObject* m_Enemy;
 	void Destroy();
+
 };

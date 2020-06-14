@@ -20,7 +20,6 @@ protected:
 private:
 
 	Button* m_LoadCoop;
-	Button* m_LoadVS;
 	Button* m_LoadSolo;
 
 	static void LoadGame(LVB::BubbleBobbleScene::GameType type);
